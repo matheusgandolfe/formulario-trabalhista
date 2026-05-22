@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formulário de Entrevista – Ação Trabalhista</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, sans-serif; font-size: 11px; background: #f0f0f0; padding: 20px; color: #111; }
+  .page-wrapper { background: #fff; width: 210mm; margin: 0 auto 30px; padding: 14mm; box-shadow: 0 2px 12px rgba(0,0,0,0.15); }
+  .header-title { background: #2c5f8a; color: #fff; text-align: center; font-weight: bold; font-size: 13px; padding: 7px 4px; }
+  .header-subtitle { background: #4a80aa; color: #fff; text-align: center; font-weight: bold; font-size: 12px; padding: 5px 4px; margin-top: 1px; }
+  .header-date { display: flex; justify-content: flex-end; align-items: center; padding: 5px 0 4px; font-size: 11px; gap: 6px; }
+  .header-date input { border: none; border-bottom: 1px solid #333; outline: none; font-size: 11px; width: 110px; padding: 1px 2px; background: transparent; }
+  .sec-header { background: #2c5f8a; color: #fff; text-align: center; font-weight: bold; font-size: 11px; padding: 4px; margin-top: 5px; page-break-after: avoid; }
+  .sub-header { background: #c0d8ef; color: #111; text-align: center; font-weight: bold; font-size: 11px; padding: 3px; margin-top: 2px; page-break-after: avoid; }
+  table { width: 100%; border-collapse: collapse; margin-top: 1px; }
+  table td { border: 1px solid #aaa; padding: 3px 5px; vertical-align: middle; }
+  .lbl { font-weight: bold; white-space: nowrap; width: 1%; background: #f7f7f7; }
+  .val { width: auto; }
+  .inline-row { border: 1px solid #aaa; padding: 4px 6px; margin-top: 1px; display: flex; flex-wrap: wrap; align-items: center; gap: 4px; font-size: 11px; background: #fff; page-break-inside: avoid; }
+  .inline-row label { white-space: nowrap; cursor: pointer; }
+  input[type="checkbox"], input[type="radio"] { cursor: pointer; width: 13px; height: 13px; }
+  .full-row { border: 1px solid #aaa; padding: 4px 6px; margin-top: 1px; background: #fff; font-size: 11px; page-break-inside: avoid; }
+  .full-row .row-label { font-weight: bold; margin-bottom: 2px; }
+  .auto-input { display: block; width: 100%; border: none; border-bottom: 1px solid #555; outline: none; font-size: 11px; font-family: Arial, sans-serif; background: transparent; resize: none; overflow: hidden; min-height: 18px; line-height: 1.5; padding: 1px 0; }
+  .val .auto-input { border-bottom: none; }
+  .inline-row .auto-input { flex: 1; min-width: 80px; border-bottom: 1px solid #555; }
+  .test-pergunta { border: 1px solid #aaa; padding: 5px 7px; margin-top: 3px; background: #fff; font-size: 11px; display: flex; align-items: center; gap: 6px; page-break-inside: avoid; }
+  #testemunhas-container { margin-top: 2px; }
+  .btn-add-test { display: none; margin-top: 5px; padding: 5px 14px; background: #2c5f8a; color: #fff; border: none; font-size: 11px; font-weight: bold; border-radius: 3px; cursor: pointer; }
+  .btn-add-test:hover { background: #1e4a6e; }
+  .testemunha-block { border: 1px solid #aaa; padding: 5px 7px 7px; margin-top: 3px; background: #fff; page-break-inside: avoid; }
+  .testemunha-block .t-label { font-weight: bold; font-size: 11px; margin-bottom: 4px; }
+  .testemunha-block .t-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: 4px; }
+  .testemunha-block .t-fields .field, .testemunha-block .t-sign-info .field { display: flex; flex-direction: column; gap: 2px; }
+  .testemunha-block .t-fields .field label, .testemunha-block .t-sign-info .field label { font-size: 10px; font-weight: bold; color: #444; }
+  .testemunha-block .t-sign { margin-top: 14px; }
+  .testemunha-block .t-sign-line { border-bottom: 1px solid #333; min-height: 55px; margin-bottom: 4px; }
+  .testemunha-block .t-sign-info { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px; }
+  .btn-rem-test { float: right; padding: 2px 8px; background: #c0392b; color: #fff; border: none; font-size: 10px; border-radius: 3px; cursor: pointer; margin-left: 6px; }
+  .btn-rem-test:hover { background: #96281b; }
+  .sign-section { margin-top: 10px; page-break-inside: avoid; }
+  .sign-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 6px; }
+  .sign-box { border: 1px solid #aaa; padding: 8px 10px; background: #fff; }
+  .sign-box .sign-title { font-weight: bold; text-align: center; font-size: 11px; margin-bottom: 6px; background: #eaf0f7; padding: 3px; }
+  .sign-box .sign-area { min-height: 80px; border-bottom: 1px solid #333; margin-bottom: 8px; }
+  .sign-box .sign-fields { display: flex; flex-direction: column; gap: 6px; }
+  .sign-box .sign-fields .field label { font-size: 10px; font-weight: bold; color: #444; display: block; margin-bottom: 1px; }
+  .info-box { border: 1px solid #aaa; padding: 8px; margin-top: 3px; background: #fff; min-height: 60px; }
+  .btn-bar { display: flex; justify-content: center; gap: 12px; margin: 0 auto 20px; width: 210mm; }
+  .print-btn, .send-btn { padding: 12px 36px; color: #fff; border: none; font-size: 14px; font-weight: bold; border-radius: 4px; cursor: pointer; flex: 1; max-width: 260px; }
+  .print-btn { background: #2c5f8a; }
+  .print-btn:hover { background: #1e4a6e; }
+  .send-btn { background: #27834a; }
+  .send-btn:hover { background: #1a5c33; }
+  .send-btn:disabled { background: #888; cursor: not-allowed; }
+  @media print {
+    @page { size: A4; margin: 12mm 14mm; }
+    html, body { background: #fff !important; padding: 0 !important; margin: 0 !important; }
+    .btn-bar, .test-pergunta, #btn-add-testemunha, .btn-rem-test { display: none !important; }
+    .page-wrapper { box-shadow: none !important; width: 100% !important; margin: 0 !important; padding: 0 !important; }
+    .sec-header, .sub-header, .inline-row, .full-row, .testemunha-block, .sign-section, table tr { page-break-inside: avoid; }
+    .sec-header + *, .sub-header + * { page-break-before: avoid; }
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="btn-bar">
+  <button class="print-btn" onclick="window.print()">🖨️ Imprimir / Gerar PDF</button>
+  <button class="send-btn" onclick="enviarFormulario()">📤 Enviar para o Sistema</button>
+</div>
+
+<div class="page-wrapper">
+
+  <div class="header-title">Formulário de Entrevista – Ação Trabalhista</div>
+  <div class="header-subtitle">ODIR DE ARAUJO FILHO – ADVOCACIA</div>
+  <div class="header-date">
+    <strong>Data da Entrevista:</strong>
+    <input type="date" name="data_entrevista" />
+  </div>
+
+  <!-- 1 -->
+  <div class="sec-header">1. Qualificação das Partes</div>
+  <div class="sub-header">Reclamante (Cliente):</div>
+  <table>
+    <tr><td class="lbl">Nome completo:</td><td class="val"><input type="text" name="rec_nome" /></td></tr>
+    <tr><td class="lbl">CPF:</td><td class="val"><input type="text" name="rec_cpf" /></td></tr>
+    <tr><td class="lbl">RG:</td><td class="val"><input type="text" name="rec_rg" /></td></tr>
+    <tr><td class="lbl">Data de nascimento:</td><td class="val"><input type="date" name="rec_nascimento" /></td></tr>
+    <tr><td class="lbl">Estado civil:</td><td class="val"><input type="text" name="rec_estado_civil" /></td></tr>
+    <tr><td class="lbl">Endereço completo:</td><td class="val"><input type="text" name="rec_endereco" /></td></tr>
+    <tr><td class="lbl">CEP:</td><td class="val"><input type="text" name="rec_cep" /></td></tr>
+    <tr><td class="lbl">Telefone:</td><td class="val"><input type="text" name="rec_telefone" /></td></tr>
+    <tr><td class="lbl">E-mail:</td><td class="val"><input type="text" name="rec_email" /></td></tr>
+    <tr><td class="lbl">Profissão:</td><td class="val"><input type="text" name="rec_profissao" /></td></tr>
+    <tr><td class="lbl">Nome da mãe:</td><td class="val"><input type="text" name="rec_mae" /></td></tr>
+    <tr><td class="lbl">PIS/PASEP:</td><td class="val"><input type="text" name="rec_pis" /></td></tr>
+    <tr><td class="lbl">CTPS (Nº, Série, UF):</td><td class="val"><input type="text" name="rec_ctps" /></td></tr>
+  </table>
+  <div class="sub-header">Reclamada (Empregador):</div>
+  <table>
+    <tr><td class="lbl">Nome (Razão Social):</td><td class="val"><input type="text" name="emp_nome" /></td></tr>
+    <tr><td class="lbl">CNPJ:</td><td class="val"><input type="text" name="emp_cnpj" /></td></tr>
+    <tr><td class="lbl">Endereço completo:</td><td class="val"><input type="text" name="emp_endereco" /></td></tr>
+    <tr><td class="lbl">Nome superior direto:</td><td class="val"><input type="text" name="emp_superior" /></td></tr>
+    <tr><td class="lbl">Nome outro gestores:</td><td class="val"><input type="text" name="emp_gestores" /></td></tr>
+  </table>
+
+  <!-- 2 -->
+  <div class="sec-header">2. Dados do Contrato de Trabalho</div>
+  <div class="inline-row">
+    <span>Data de admissão:</span> <input type="date" name="data_admissao" style="flex:0 0 130px;" />
+    &nbsp;&nbsp;<span>Data do Aviso Prévio:</span> <input type="date" name="data_aviso" style="flex:0 0 130px;" />
+    &nbsp;&nbsp;<span>Data de saída (último dia):</span> <input type="date" name="data_saida" style="flex:0 0 130px;" />
+  </div>
+  <div class="inline-row">
+    A CTPS foi assinada?
+    <input type="checkbox" id="ctps_sim"><label for="ctps_sim"> Sim</label>
+    <input type="checkbox" id="ctps_nao"><label for="ctps_nao"> Não.</label>
+    &nbsp; Se sim, em que data? <input type="date" name="data_ctps" style="flex:0 0 130px;" />
+  </div>
+  <div class="inline-row">
+    <input type="checkbox" id="ped_dem"><label for="ped_dem"> Pedido de demissão</label>
+    <input type="checkbox" id="dem_sj"><label for="dem_sj"> Demissão sem justa causa.</label>
+    <input type="checkbox" id="res_ind"><label for="res_ind"> Rescisão Indireta</label>
+    <input type="checkbox" id="dem_jc"><label for="dem_jc"> Demissão por justa causa.</label>
+  </div>
+  <div class="full-row"><span class="row-label">Motivo Alegado:</span><input type="text" name="motivo_alegado" /></div>
+  <div class="full-row"><span class="row-label">Função na CTPS:</span><input type="text" name="funcao_ctps" /></div>
+  <div class="full-row"><span class="row-label">Funções exercidas:</span><input type="text" name="funcoes_exercidas" /></div>
+  <div class="inline-row">Salário registrado: R$ <input type="text" name="salario" style="flex:0 0 120px;" /></div>
+  <div class="inline-row">
+    Recebia salário "por fora"?
+    <input type="checkbox" id="pf_sim"><label for="pf_sim"> Sim</label>
+    <input type="checkbox" id="pf_nao"><label for="pf_nao"> Não.</label>
+    &nbsp; Se sim, qual a forma? <input type="text" name="salario_fora_forma" />
+  </div>
+  <div class="inline-row">
+    Houve alteração de função ou rebaixamento?
+    <input type="checkbox" id="alt_sim"><label for="alt_sim"> Sim</label>
+    <input type="checkbox" id="alt_nao"><label for="alt_nao"> Não.</label>
+  </div>
+  <div class="full-row"><span class="row-label">Descreva:</span><textarea name="alteracao_descricao" rows="2"></textarea></div>
+  <div class="inline-row">
+    Recebia comissões ou outras verbas variáveis?
+    <input type="checkbox" id="com_sim"><label for="com_sim"> Sim</label>
+    <input type="checkbox" id="com_nao"><label for="com_nao"> Não.</label>
+  </div>
+  <div class="full-row"><span class="row-label">Como era o cálculo:</span><input type="text" name="calculo_comissoes" /></div>
+  <div class="inline-row">
+    Pagamento no contracheque:
+    <input type="checkbox" id="pg_cc_sim"><label for="pg_cc_sim"> Sim</label>
+    <input type="checkbox" id="pg_cc_nao"><label for="pg_cc_nao"> Não.</label>
+    &nbsp;&nbsp; De que forma:
+    <input type="checkbox" id="pg_dep"><label for="pg_dep"> Depósito em conta</label>
+    <input type="checkbox" id="pg_esp"><label for="pg_esp"> Em espécie.</label>
+  </div>
+
+  <!-- 3 -->
+  <div class="sec-header">3. Vínculo Empregatício (se não houve registro)</div>
+  <div class="inline-row">
+    Recebia ordens diretas?
+    <input type="checkbox" id="ord_sim"><label for="ord_sim"> Sim</label>
+    <input type="checkbox" id="ord_nao"><label for="ord_nao"> Não.</label>
+    &nbsp; Cumpria horários fixos?
+    <input type="checkbox" id="hor_sim"><label for="hor_sim"> Sim</label>
+    <input type="checkbox" id="hor_nao"><label for="hor_nao"> Não.</label>
+  </div>
+  <div class="full-row"><span class="row-label">Frequência de trabalho:</span><input type="text" name="frequencia_trabalho" /></div>
+  <div class="inline-row">
+    Recebia salário?
+    <input type="checkbox" id="sal_sim"><label for="sal_sim"> Sim</label>
+    <input type="checkbox" id="sal_nao"><label for="sal_nao"> Não.</label>
+    &nbsp; Poderia ser substituído por outro?
+    <input type="checkbox" id="sub_sim"><label for="sub_sim"> Sim</label>
+    <input type="checkbox" id="sub_nao"><label for="sub_nao"> Não.</label>
+  </div>
+  <div class="inline-row">
+    Utilizava uniforme, crachá ou ferramentas da empresa?
+    <input type="checkbox" id="uni_sim"><label for="uni_sim"> Sim</label>
+    <input type="checkbox" id="uni_nao"><label for="uni_nao"> Não.</label>
+  </div>
+
+  <!-- 4 -->
+  <div class="sec-header">4. Jornada de Trabalho e Horas Extras</div>
+  <div class="full-row"><span class="row-label">Horário Contratual:</span><input type="text" name="horario_contratual" /></div>
+  <div class="inline-row">
+    Horário efetivo: Entrada <input type="text" name="horario_entrada" style="flex:0 0 60px;" />
+    Intervalo <input type="text" name="intervalo_inicio" style="flex:0 0 50px;" /> às <input type="text" name="intervalo_fim" style="flex:0 0 50px;" />
+    Saída <input type="text" name="horario_saida" style="flex:0 0 60px;" />
+  </div>
+  <div class="full-row"><span class="row-label">Escala:</span><input type="text" name="escala" /></div>
+  <div class="inline-row">
+    Registro de ponto:
+    <input type="checkbox" id="ponto_c"><label for="ponto_c"> Cartão</label>
+    <input type="checkbox" id="ponto_f"><label for="ponto_f"> Folha</label>
+    <input type="checkbox" id="ponto_b"><label for="ponto_b"> Biometria</label>
+    <input type="checkbox" id="ponto_n"><label for="ponto_n"> Não havia.</label>
+  </div>
+  <div class="inline-row">
+    O registro era correto?
+    <input type="checkbox" id="reg_s"><label for="reg_s"> Sim</label>
+    <input type="checkbox" id="reg_n"><label for="reg_n"> Não.</label>
+    &nbsp; Trabalhava em domingos e feriados?
+    <input type="checkbox" id="dom_s"><label for="dom_s"> Sim</label>
+    <input type="checkbox" id="dom_n"><label for="dom_n"> Não.</label>
+  </div>
+  <div class="inline-row">
+    Havia Pagamento Horas Extras?
+    <input type="checkbox" id="hex_s"><label for="hex_s"> Sim</label>
+    <input type="checkbox" id="hex_n"><label for="hex_n"> Não.</label>
+    &nbsp; Intervalo refeição?
+    <input type="checkbox" id="int_s"><label for="int_s"> Sim</label>
+    <input type="checkbox" id="int_n"><label for="int_n"> Não.</label>
+  </div>
+
+  <!-- 5 -->
+  <div class="sec-header">5. Verbas Rescisórias</div>
+  <div class="inline-row">
+    Recebeu o TRCT?
+    <input type="checkbox" id="trct_s"><label for="trct_s"> Sim</label>
+    <input type="checkbox" id="trct_n"><label for="trct_n"> Não.</label>
+    &nbsp; Recebeu os valores da Rescisão?
+    <input type="checkbox" id="res_s"><label for="res_s"> Sim</label>
+    <input type="checkbox" id="res_n"><label for="res_n"> Não.</label>
+  </div>
+  <div class="inline-row">
+    Tem comprovante de pagamento?
+    <input type="checkbox" id="comp_s"><label for="comp_s"> Sim</label>
+    <input type="checkbox" id="comp_n"><label for="comp_n"> Não.</label>
+    &nbsp; Aviso:
+    <input type="checkbox" id="av_t"><label for="av_t"> Trabalhado</label>
+    <input type="checkbox" id="av_i"><label for="av_i"> Indenizado.</label>
+  </div>
+  <div class="inline-row">
+    Recebeu as guias do FGTS e seguro-desemprego?
+    <input type="checkbox" id="fgts_s"><label for="fgts_s"> Sim</label>
+    <input type="checkbox" id="fgts_n"><label for="fgts_n"> Não.</label>
+  </div>
+
+  <!-- 6 -->
+  <div class="sec-header">6. Assédio Moral</div>
+  <div class="inline-row">
+    Sofreu humilhações/constrangimentos?
+    <input type="checkbox" id="ass_s"><label for="ass_s"> Sim</label>
+    <input type="checkbox" id="ass_n"><label for="ass_n"> Não.</label>
+    &nbsp; Teve Testemunhas?
+    <input type="checkbox" id="test_ass_s"><label for="test_ass_s"> Sim</label>
+    <input type="checkbox" id="test_ass_n"><label for="test_ass_n"> Não.</label>
+  </div>
+  <div class="inline-row">
+    A empresa foi comunicada?
+    <input type="checkbox" id="emp_s"><label for="emp_s"> Sim</label>
+    <input type="checkbox" id="emp_n"><label for="emp_n"> Não.</label>
+  </div>
+  <div class="inline-row">
+    O fato causou danos à saúde (física ou mental)?
+    <input type="checkbox" id="dano_s"><label for="dano_s"> Sim</label>
+    <input type="checkbox" id="dano_n"><label for="dano_n"> Não.</label>
+  </div>
+  <div class="full-row"><span class="row-label">Descreva os fatos:</span><textarea name="assedio_descricao" rows="2"></textarea></div>
+
+  <!-- 7 -->
+  <div class="sec-header">7. Adicional de Insalubridade / Periculosidade</div>
+  <div class="inline-row">
+    Estava exposto a agentes nocivos?
+    <input type="checkbox" id="ag_r"><label for="ag_r"> Ruído</label>
+    <input type="checkbox" id="ag_c"><label for="ag_c"> Calor/Frio</label>
+    <input type="checkbox" id="ag_q"><label for="ag_q"> Químicos</label>
+    <input type="checkbox" id="ag_p"><label for="ag_p"> Poeira</label>
+    <input type="checkbox" id="ag_o"><label for="ag_o"> Outros:</label>
+    <input type="text" name="agentes_outros" />
+  </div>
+  <div class="inline-row">
+    A empresa fornecia EPIs?
+    <input type="checkbox" id="epi_s"><label for="epi_s"> Sim</label>
+    <input type="checkbox" id="epi_n"><label for="epi_n"> Não.</label>
+    &nbsp; Quais? <input type="text" name="epis_quais" />
+  </div>
+  <div class="inline-row">
+    Havia fiscalização do uso?
+    <input type="checkbox" id="fisc_s"><label for="fisc_s"> Sim</label>
+    <input type="checkbox" id="fisc_n"><label for="fisc_n"> Não.</label>
+  </div>
+  <div class="inline-row">
+    Recebia algum adicional?
+    <input type="checkbox" id="adic_i"><label for="adic_i"> Insalubridade (</label>
+    <input type="text" name="insalubridade_pct" style="flex:0 0 30px;" />%)
+    <input type="checkbox" id="adic_p"><label for="adic_p"> Periculosidade (30%).</label>
+  </div>
+  <div class="inline-row">
+    Trabalhava com:
+    <input type="checkbox" id="trab_inf"><label for="trab_inf"> Inflamáveis</label>
+    <input type="checkbox" id="trab_exp"><label for="trab_exp"> Explosivos</label>
+    <input type="checkbox" id="trab_ele"><label for="trab_ele"> Energia elétrica</label>
+    <input type="checkbox" id="trab_mot"><label for="trab_mot"> Motocicleta.</label>
+  </div>
+
+  <!-- 8 -->
+  <div class="sec-header">8. Documentos Necessários</div>
+  <div class="inline-row">
+    <input type="checkbox" id="doc_rg"><label for="doc_rg"> RG e CPF.</label>
+    <input type="checkbox" id="doc_res"><label for="doc_res"> Comprovante de Residência.</label>
+    <input type="checkbox" id="doc_ctps"><label for="doc_ctps"> CTPS</label>
+  </div>
+  <div class="inline-row">
+    <input type="checkbox" id="doc_ct"><label for="doc_ct"> Contrato de trabalho e aditivos.</label>
+    <input type="checkbox" id="doc_sal"><label for="doc_sal"> Recibos Salariais.</label>
+    <input type="checkbox" id="doc_cart"><label for="doc_cart"> Cartões de Ponto.</label>
+  </div>
+  <div class="inline-row">
+    <input type="checkbox" id="doc_ext"><label for="doc_ext"> Extratos bancários da conta salário e do FGTS.</label>
+    <input type="checkbox" id="doc_trct"><label for="doc_trct"> TRCT e comprovantes.</label>
+  </div>
+  <div class="inline-row">
+    <input type="checkbox" id="doc_at"><label for="doc_at"> Atestados e laudos médicos.</label>
+  </div>
+  <div class="inline-row">
+    <input type="checkbox" id="doc_proc"><label for="doc_proc"> Procuração, Declaração de gratuidade e Contrato de Honorários</label>
+  </div>
+
+  <!-- 9 -->
+  <div class="sec-header">9. Outras Provas:</div>
+  <div class="inline-row">
+    <input type="checkbox" id="prov_e"><label for="prov_e"> E-mails, conversas de WhatsApp, áudios, vídeos</label>
+  </div>
+  <div class="inline-row">
+    <input type="checkbox" id="prov_f"><label for="prov_f"> Fotografias ou vídeos do ambiente de trabalho</label>
+  </div>
+
+  <!-- 10 -->
+  <div class="sec-header">10. Testemunhas</div>
+  <div class="test-pergunta">
+    <strong>O autor possui testemunhas?</strong>
+    <input type="radio" name="tem_testemunhas" id="test_sim" value="sim" onchange="toggleTestemunhas(this)">
+    <label for="test_sim">Sim</label>
+    <input type="radio" name="tem_testemunhas" id="test_nao" value="nao" onchange="toggleTestemunhas(this)">
+    <label for="test_nao">Não</label>
+  </div>
+  <div id="testemunhas-container" style="display:none;"></div>
+  <button class="btn-add-test" id="btn-add-testemunha" onclick="adicionarTestemunha()">+ Incluir Testemunha</button>
+
+  <!-- 11 -->
+  <div class="sec-header" style="margin-top:10px;">11. Informações e Esclarecimentos Complementares</div>
+  <div class="info-box">
+    <textarea name="info_complementares" class="auto-input" style="min-height:160px; line-height:1.8;" placeholder="Descreva aqui quaisquer informações adicionais, esclarecimentos complementares, observações relevantes ao caso ou outros detalhes que não se enquadrem nas seções anteriores..."></textarea>
+  </div>
+
+  <!-- ASSINATURAS -->
+  <div class="sign-section">
+    <div class="sec-header" style="margin-top:18px;">Assinaturas</div>
+    <div class="sign-grid">
+      <div class="sign-box">
+        <div class="sign-title">Reclamante (Cliente)</div>
+        <div style="font-size:10px; color:#555; margin-bottom:6px;">Assinatura Digital:</div>
+        <div class="sign-area"></div>
+        <div class="sign-fields">
+          <div class="field"><label>Nome completo:</label><input type="text" name="assin_rec_nome" /></div>
+          <div class="field"><label>CPF:</label><input type="text" name="assin_rec_cpf" /></div>
+          <div class="field"><label>Data:</label><input type="date" name="assin_rec_data" /></div>
+        </div>
+      </div>
+      <div class="sign-box">
+        <div class="sign-title">Advogado / Responsável</div>
+        <div style="font-size:10px; color:#555; margin-bottom:6px;">Assinatura Digital:</div>
+        <div class="sign-area"></div>
+        <div class="sign-fields">
+          <div class="field"><label>Nome completo:</label><input type="text" name="assin_adv_nome" /></div>
+          <div class="field"><label>CPF / OAB:</label><input type="text" name="assin_adv_oab" /></div>
+          <div class="field"><label>Data:</label><input type="date" name="assin_adv_data" /></div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:14px; border:1px solid #aaa; padding:7px 9px; background:#f9f9f9; font-size:10px; color:#444; line-height:1.6;">
+      <strong>Declaração:</strong> Declaro que as informações prestadas neste formulário são verdadeiras e completas, e que fui devidamente orientado(a) sobre os direitos e deveres referentes à ação trabalhista em questão.
+    </div>
+  </div>
+
+</div><!-- end page-wrapper -->
+
+<div class="btn-bar">
+  <button class="print-btn" onclick="window.print()">🖨️ Imprimir / Gerar PDF</button>
+  <button class="send-btn" onclick="enviarFormulario()">📤 Enviar para o Sistema</button>
+</div>
+
+<script>
+// ── NOMES LEGÍVEIS ───────────────────────────────────────────────────────────
+const NOMES = {
+  ctps_sim:      'CTPS assinada - Sim',
+  ctps_nao:      'CTPS assinada - Não',
+  ped_dem:       'Tipo de rescisão - Pedido de demissão',
+  dem_sj:        'Tipo de rescisão - Demissão sem justa causa',
+  res_ind:       'Tipo de rescisão - Rescisão Indireta',
+  dem_jc:        'Tipo de rescisão - Demissão por justa causa',
+  pf_sim:        'Salário por fora - Sim',
+  pf_nao:        'Salário por fora - Não',
+  alt_sim:       'Alteração de função/rebaixamento - Sim',
+  alt_nao:       'Alteração de função/rebaixamento - Não',
+  com_sim:       'Comissões ou verbas variáveis - Sim',
+  com_nao:       'Comissões ou verbas variáveis - Não',
+  pg_cc_sim:     'Pagamento no contracheque - Sim',
+  pg_cc_nao:     'Pagamento no contracheque - Não (por fora)',
+  pg_dep:        'Forma de pagamento - Depósito em conta',
+  pg_esp:        'Forma de pagamento - Em espécie',
+  ord_sim:       'Recebia ordens diretas - Sim',
+  ord_nao:       'Recebia ordens diretas - Não',
+  hor_sim:       'Cumpria horários fixos - Sim',
+  hor_nao:       'Cumpria horários fixos - Não',
+  sal_sim:       'Recebia salário - Sim',
+  sal_nao:       'Recebia salário - Não',
+  sub_sim:       'Podia ser substituído - Sim',
+  sub_nao:       'Podia ser substituído - Não',
+  uni_sim:       'Usava uniforme/crachá/ferramentas - Sim',
+  uni_nao:       'Usava uniforme/crachá/ferramentas - Não',
+  ponto_c:       'Registro de ponto - Cartão',
+  ponto_f:       'Registro de ponto - Folha',
+  ponto_b:       'Registro de ponto - Biometria',
+  ponto_n:       'Registro de ponto - Não havia',
+  reg_s:         'Registro de ponto correto - Sim',
+  reg_n:         'Registro de ponto correto - Não',
+  dom_s:         'Trabalhava domingos e feriados - Sim',
+  dom_n:         'Trabalhava domingos e feriados - Não',
+  hex_s:         'Pagamento de horas extras - Sim',
+  hex_n:         'Pagamento de horas extras - Não',
+  int_s:         'Intervalo de refeição - Sim',
+  int_n:         'Intervalo de refeição - Não',
+  trct_s:        'Recebeu TRCT - Sim',
+  trct_n:        'Recebeu TRCT - Não',
+  res_s:         'Recebeu valores da rescisão - Sim',
+  res_n:         'Recebeu valores da rescisão - Não',
+  comp_s:        'Tem comprovante de pagamento - Sim',
+  comp_n:        'Tem comprovante de pagamento - Não',
+  av_t:          'Aviso prévio - Trabalhado',
+  av_i:          'Aviso prévio - Indenizado',
+  fgts_s:        'Recebeu guias FGTS e seguro-desemprego - Sim',
+  fgts_n:        'Recebeu guias FGTS e seguro-desemprego - Não',
+  ass_s:         'Sofreu assédio moral - Sim',
+  ass_n:         'Sofreu assédio moral - Não',
+  test_ass_s:    'Assédio moral - Teve testemunhas - Sim',
+  test_ass_n:    'Assédio moral - Teve testemunhas - Não',
+  emp_s:         'Empresa foi comunicada sobre assédio - Sim',
+  emp_n:         'Empresa foi comunicada sobre assédio - Não',
+  dano_s:        'Assédio causou danos à saúde - Sim',
+  dano_n:        'Assédio causou danos à saúde - Não',
+  ag_r:          'Agente nocivo - Ruído',
+  ag_c:          'Agente nocivo - Calor/Frio',
+  ag_q:          'Agente nocivo - Químicos',
+  ag_p:          'Agente nocivo - Poeira',
+  ag_o:          'Agente nocivo - Outros',
+  epi_s:         'Empresa fornecia EPIs - Sim',
+  epi_n:         'Empresa fornecia EPIs - Não',
+  fisc_s:        'Havia fiscalização do uso de EPIs - Sim',
+  fisc_n:        'Havia fiscalização do uso de EPIs - Não',
+  adic_i:        'Recebia adicional de insalubridade - Sim',
+  adic_p:        'Recebia adicional de periculosidade (30%) - Sim',
+  trab_inf:      'Trabalhava com - Inflamáveis',
+  trab_exp:      'Trabalhava com - Explosivos',
+  trab_ele:      'Trabalhava com - Energia elétrica',
+  trab_mot:      'Trabalhava com - Motocicleta',
+  doc_rg:        'Documento - RG e CPF',
+  doc_res:       'Documento - Comprovante de Residência',
+  doc_ctps:      'Documento - CTPS',
+  doc_ct:        'Documento - Contrato de trabalho e aditivos',
+  doc_sal:       'Documento - Recibos Salariais',
+  doc_cart:      'Documento - Cartões de Ponto',
+  doc_ext:       'Documento - Extratos bancários FGTS',
+  doc_trct:      'Documento - TRCT e comprovantes',
+  doc_at:        'Documento - Atestados e laudos médicos',
+  doc_proc:      'Documento - Procuração e Contrato de Honorários',
+  prov_e:        'Prova - E-mails/WhatsApp/áudios/vídeos',
+  prov_f:        'Prova - Fotografias ou vídeos do ambiente',
+  // campos de texto
+  data_entrevista:       'Data da Entrevista',
+  rec_nome:              'Reclamante - Nome completo',
+  rec_cpf:               'Reclamante - CPF',
+  rec_rg:                'Reclamante - RG',
+  rec_nascimento:        'Reclamante - Data de nascimento',
+  rec_estado_civil:      'Reclamante - Estado civil',
+  rec_endereco:          'Reclamante - Endereço',
+  rec_cep:               'Reclamante - CEP',
+  rec_telefone:          'Reclamante - Telefone',
+  rec_email:             'Reclamante - E-mail',
+  rec_profissao:         'Reclamante - Profissão',
+  rec_mae:               'Reclamante - Nome da mãe',
+  rec_pis:               'Reclamante - PIS/PASEP',
+  rec_ctps:              'Reclamante - CTPS',
+  emp_nome:              'Reclamada - Nome/Razão Social',
+  emp_cnpj:              'Reclamada - CNPJ',
+  emp_endereco:          'Reclamada - Endereço',
+  emp_superior:          'Reclamada - Superior direto',
+  emp_gestores:          'Reclamada - Outros gestores',
+  data_admissao:         'Data de admissão',
+  data_aviso:            'Data do Aviso Prévio',
+  data_saida:            'Data de saída',
+  data_ctps:             'Data de assinatura da CTPS',
+  motivo_alegado:        'Motivo alegado',
+  funcao_ctps:           'Função na CTPS',
+  funcoes_exercidas:     'Funções exercidas',
+  salario:               'Salário registrado (R$)',
+  salario_fora_forma:    'Forma do salário por fora',
+  alteracao_descricao:   'Descrição da alteração de função',
+  calculo_comissoes:     'Cálculo das comissões',
+  frequencia_trabalho:   'Frequência de trabalho',
+  horario_contratual:    'Horário contratual',
+  horario_entrada:       'Horário de entrada',
+  intervalo_inicio:      'Intervalo - início',
+  intervalo_fim:         'Intervalo - fim',
+  horario_saida:         'Horário de saída',
+  escala:                'Escala',
+  assedio_descricao:     'Descrição dos fatos de assédio moral',
+  agentes_outros:        'Outros agentes nocivos',
+  epis_quais:            'Quais EPIs eram fornecidos',
+  insalubridade_pct:     'Percentual de insalubridade',
+  info_complementares:   'Informações e esclarecimentos complementares',
+  assin_rec_nome:        'Assinatura - Reclamante - Nome',
+  assin_rec_cpf:         'Assinatura - Reclamante - CPF',
+  assin_rec_data:        'Assinatura - Reclamante - Data',
+  assin_adv_nome:        'Assinatura - Advogado - Nome',
+  assin_adv_oab:         'Assinatura - Advogado - CPF/OAB',
+  assin_adv_data:        'Assinatura - Advogado - Data',
+  tem_testemunhas:       'Possui testemunhas',
+};
+
+// ── AUTO-EXPAND ──────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  converterInputsParaAutoExpand(document);
+});
+
+function converterInputsParaAutoExpand(root) {
+  root.querySelectorAll('input[type="text"]').forEach(input => {
+    const ta = document.createElement('textarea');
+    ta.className = 'auto-input';
+    ta.value = input.value;
+    ta.placeholder = input.placeholder || '';
+    ta.rows = 1;
+    if (input.name) ta.name = input.name;
+    if (input.style.cssText) ta.style.cssText = input.style.cssText;
+    input.parentNode.replaceChild(ta, input);
+    autoResize(ta);
+    ta.addEventListener('input', () => autoResize(ta));
+  });
+  root.querySelectorAll('textarea:not(.auto-input)').forEach(ta => {
+    ta.classList.add('auto-input');
+    autoResize(ta);
+    ta.addEventListener('input', () => autoResize(ta));
+  });
+  root.querySelectorAll('textarea.auto-input').forEach(ta => {
+    if (!ta.dataset.bound) {
+      ta.dataset.bound = '1';
+      ta.addEventListener('input', () => autoResize(ta));
+      autoResize(ta);
+    }
+  });
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = el.scrollHeight + 'px';
+}
+
+// ── TESTEMUNHAS ──────────────────────────────────────────────────────────────
+const ordinals = ['Primeira','Segunda','Terceira','Quarta','Quinta','Sexta'];
+let contTestemunhas = 0;
+
+function toggleTestemunhas(radio) {
+  const container = document.getElementById('testemunhas-container');
+  const btnAdd = document.getElementById('btn-add-testemunha');
+  if (radio.value === 'sim') {
+    container.style.display = 'block';
+    btnAdd.style.display = 'inline-block';
+    if (contTestemunhas === 0) adicionarTestemunha();
+  } else {
+    container.style.display = 'none';
+    btnAdd.style.display = 'none';
+    container.innerHTML = '';
+    contTestemunhas = 0;
+  }
+}
+
+function adicionarTestemunha() {
+  contTestemunhas++;
+  const label = ordinals[contTestemunhas - 1] || (contTestemunhas + 'ª');
+  const container = document.getElementById('testemunhas-container');
+  const div = document.createElement('div');
+  div.className = 'testemunha-block';
+  div.innerHTML = `
+    <div class="t-label">${label} Testemunha:
+      <button class="btn-rem-test" onclick="removerTestemunha(this)">✕ Remover</button>
+    </div>
+    <div class="t-fields">
+      <div class="field"><label>Nome completo:</label><input type="text" name="test_nome" /></div>
+      <div class="field"><label>CPF:</label><input type="text" name="test_cpf" /></div>
+      <div class="field"><label>Endereço:</label><input type="text" name="test_endereco" /></div>
+      <div class="field"><label>Contato (telefone/e-mail):</label><input type="text" name="test_contato" /></div>
+    </div>
+    <div class="t-sign">
+      <div style="font-size:10px;color:#555;margin-bottom:4px;">Assinatura Digital:</div>
+      <div class="t-sign-line"></div>
+      <div class="t-sign-info">
+        <div class="field"><label>Nome:</label><input type="text" name="test_assin_nome" /></div>
+        <div class="field"><label>CPF:</label><input type="text" name="test_assin_cpf" /></div>
+      </div>
+    </div>`;
+  container.appendChild(div);
+  converterInputsParaAutoExpand(div);
+  renumerarTestemunhas();
+}
+
+function removerTestemunha(btn) {
+  btn.closest('.testemunha-block').remove();
+  contTestemunhas--;
+  renumerarTestemunhas();
+  if (contTestemunhas === 0) {
+    document.getElementById('test_sim').checked = false;
+    document.getElementById('test_nao').checked = true;
+    document.getElementById('testemunhas-container').style.display = 'none';
+    document.getElementById('btn-add-testemunha').style.display = 'none';
+  }
+}
+
+function renumerarTestemunhas() {
+  document.querySelectorAll('#testemunhas-container .testemunha-block').forEach((bloco, i) => {
+    const lbl = ordinals[i] || ((i+1) + 'ª');
+    bloco.querySelector('.t-label').innerHTML =
+      `${lbl} Testemunha: <button class="btn-rem-test" onclick="removerTestemunha(this)">✕ Remover</button>`;
+  });
+}
+
+// ── ENVIO WEBHOOK ────────────────────────────────────────────────────────────
+async function enviarFormulario() {
+  const WEBHOOK_URL = 'https://gvirtus.app.n8n.cloud/webhook/d9818df8-d082-450d-a313-832865835302';
+
+  // Clona o documento
+  const clone = document.documentElement.cloneNode(true);
+
+  // Sincroniza valores dos textareas no clone
+  document.querySelectorAll('textarea').forEach((orig, i) => {
+    const clones = clone.querySelectorAll('textarea');
+    if (clones[i]) clones[i].innerHTML = orig.value;
+  });
+
+  // Sincroniza inputs date/radio/checkbox no clone
+  document.querySelectorAll('input').forEach((orig, i) => {
+    const clones = clone.querySelectorAll('input');
+    if (!clones[i]) return;
+    if (orig.type === 'checkbox' || orig.type === 'radio') {
+      if (orig.checked) clones[i].setAttribute('checked', 'checked');
+      else clones[i].removeAttribute('checked');
+    } else {
+      clones[i].setAttribute('value', orig.value);
+    }
+  });
+
+  // Remove elementos de interface
+  clone.querySelectorAll('.btn-bar, .btn-add-test, .btn-rem-test, .test-pergunta').forEach(el => el.remove());
+
+  // Remove testemunhas se "Não" marcado
+  const testNao = document.querySelector('#test_nao');
+  if (testNao && testNao.checked) {
+    const container = clone.querySelector('#testemunhas-container');
+    if (container) container.innerHTML = '';
+  }
+
+  // Converte campos interativos em texto estático para o PDF
+  // Textareas → spans
+  clone.querySelectorAll('textarea').forEach(ta => {
+    const span = document.createElement('span');
+    span.style.cssText = 'font-size:11px; font-family:Arial,sans-serif; white-space:pre-wrap; display:block;';
+    span.textContent = ta.value || ta.innerHTML;
+    ta.parentNode.replaceChild(span, ta);
+  });
+
+  // Inputs date → spans com valor formatado
+  clone.querySelectorAll('input[type="date"]').forEach(inp => {
+    const span = document.createElement('span');
+    span.style.cssText = 'font-size:11px; font-family:Arial,sans-serif;';
+    const val = inp.getAttribute('value') || '';
+    if (val) {
+      const [y, m, d] = val.split('-');
+      span.textContent = `${d}/${m}/${y}`;
+    }
+    inp.parentNode.replaceChild(span, inp);
+  });
+
+  const htmlFinal = '<!DOCTYPE html>\n' + clone.outerHTML;
+
+  const btns = document.querySelectorAll('.send-btn');
+  btns.forEach(b => { b.disabled = true; b.textContent = '⏳ Enviando...'; });
+
+  try {
+    const resp = await fetch(WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ html: htmlFinal })
+    });
+    if (resp.ok) {
+      btns.forEach(b => { b.textContent = '✅ Enviado!'; b.style.background = '#27834a'; });
+    } else {
+      throw new Error('Erro ' + resp.status);
+    }
+  } catch (err) {
+    btns.forEach(b => { b.disabled = false; b.textContent = '📤 Enviar para o Sistema'; });
+    alert('Erro ao enviar: ' + err.message);
+  }
+}
+</script>
+</body>
+</html>
