@@ -42,6 +42,9 @@
   .btn-abrir { background: var(--azul); color: #fff; padding: 7px 12px; }
   .btn-abrir:hover { background: var(--azul-esc); }
   .btn-copiar { background: #fff; color: var(--azul); border-color: var(--azul); padding: 7px 10px; }
+  .btn-excluir { background: #fff; color: #a3241a; border-color: #e0a39c; padding: 7px 10px; }
+  .btn-excluir:hover { background: #fdecea; }
+  .btn-excluir:disabled { opacity: .5; cursor: wait; }
   .vazio { padding: 30px; text-align: center; color: var(--suave); }
   .selo { display: inline-block; font-size: 11px; background: #fff7e0; color: #5c4300; border: 1px solid #e6c46a; border-radius: 10px; padding: 1px 7px; margin-left: 6px; }
   @media (max-width: 720px) {
@@ -50,7 +53,8 @@
     tr { padding: 10px 12px; border-bottom: 1px solid var(--borda); }
     td { border: none; padding: 3px 0; }
     td[data-r]::before { content: attr(data-r) ": "; color: var(--suave); font-size: 12px; }
-    .acoes { text-align: left; padding-top: 8px; }
+    .acoes { text-align: left; padding-top: 8px; white-space: normal; }
+    .acoes .btn { margin: 2px 4px 2px 0; }
   }
 </style>
 </head>
@@ -110,11 +114,12 @@ const fmtTel = (t) => {
 const fmtData = (s) => s ? new Date(s).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '—';
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
-async function carregar(senha) {
+// arquivar: slug a tirar da lista (fica guardado no banco, recuperável)
+async function carregar(senha, arquivar) {
   const resp = await fetch(WEBHOOK_LISTA, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ senha }),
+    body: JSON.stringify(arquivar ? { senha, arquivar } : { senha }),
   });
   const json = await resp.json().catch(() => ({}));
   if (!json.ok) return false;
@@ -136,7 +141,8 @@ function render() {
       <td class="num" data-r="Telefone">${esc(fmtTel(i.telefone))}</td>
       <td class="num" data-r="Atualizada">${esc(fmtData(i.atualizado_em))}</td>
       <td class="acoes"><a class="btn btn-abrir" href="${esc(link)}">Abrir</a>
-        <button class="btn btn-copiar" data-link="${esc(link)}">Copiar link</button></td>
+        <button class="btn btn-copiar" data-link="${esc(link)}">Copiar link</button>
+        <button class="btn btn-excluir" data-slug="${esc(i.slug)}" data-nome="${esc(i.nome)}" title="Tirar da lista">Excluir</button></td>
     </tr>`;
   }).join('');
   document.getElementById('vazio').hidden = filtrados.length > 0;
@@ -172,6 +178,16 @@ document.getElementById('login').addEventListener('submit', async (ev) => {
 document.getElementById('busca').addEventListener('input', render);
 document.getElementById('sair').addEventListener('click', () => { guardar(''); itens = []; mostrarLogin(); });
 document.getElementById('linhas').addEventListener('click', async (ev) => {
+  const ex = ev.target.closest('.btn-excluir');
+  if (ex) {
+    if (!confirm(`Excluir a entrevista de ${ex.dataset.nome} (${ex.dataset.slug}) da lista?`)) return;
+    ex.disabled = true; ex.textContent = 'Excluindo…';
+    try {
+      if (await carregar(lembrada() || document.getElementById('senha').value, ex.dataset.slug)) render();
+      else { guardar(''); mostrarLogin('Senha expirada, entre de novo.'); }
+    } catch (e) { alert('Não foi possível excluir (' + e.message + ').'); ex.disabled = false; ex.textContent = 'Excluir'; }
+    return;
+  }
   const b = ev.target.closest('.btn-copiar');
   if (!b) return;
   try { await navigator.clipboard.writeText(b.dataset.link); b.textContent = 'Copiado ✓'; }
