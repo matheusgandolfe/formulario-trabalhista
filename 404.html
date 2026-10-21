@@ -9,7 +9,10 @@
   (function () {
     var base = '/formulario-trabalhista/';
     var path = location.pathname;
-    if (path.indexOf(base) === 0 && path.length > base.length) {
+    var resto = path.indexOf(base) === 0 ? path.slice(base.length).replace(/\/+$/, '') : '';
+    if (resto === 'lista') {
+      location.replace(base + 'lista.html');
+    } else if (resto) {
       location.replace(base + '?p=' + encodeURIComponent(path.slice(base.length)));
     } else {
       location.replace(base);

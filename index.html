@@ -55,10 +55,12 @@
   .send-btn { background: #27834a; }
   .send-btn:hover { background: #1a5c33; }
   .send-btn:disabled { background: #888; cursor: not-allowed; }
+  .lista-btn { padding: 12px 20px; background: #fff; color: #2c5f8a; border: 1px solid #2c5f8a; font-size: 14px; font-weight: bold; border-radius: 4px; text-decoration: none; display: inline-flex; align-items: center; }
+  .lista-btn:hover { background: #eef4fa; }
   @media print {
     @page { size: A4; margin: 12mm 14mm; }
     html, body { background: #fff !important; padding: 0 !important; margin: 0 !important; }
-    .btn-bar, .test-pergunta, #btn-add-testemunha, .btn-rem-test { display: none !important; }
+    .aviso-edicao, .btn-bar, .test-pergunta, #btn-add-testemunha, .btn-rem-test { display: none !important; }
     .page-wrapper { box-shadow: none !important; width: 100% !important; margin: 0 !important; padding: 0 !important; }
     .sec-header, .sub-header, .inline-row, .full-row, .testemunha-block, .sign-section, table tr { page-break-inside: avoid; }
     .sec-header + *, .sub-header + * { page-break-before: avoid; }
@@ -69,6 +71,7 @@
 <body>
 
 <div class="btn-bar">
+  <a class="lista-btn" href="/formulario-trabalhista/lista">📋 Entrevistas</a>
   <button class="print-btn" onclick="window.print()">🖨️ Imprimir / Gerar PDF</button>
   <button class="send-btn" onclick="enviarFormulario()">📤 Enviar para o Sistema</button>
 </div>

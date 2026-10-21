@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Entrevistas Trabalhistas</title>
+<style>
+  :root { --azul: #2c5f8a; --azul-esc: #1e4a6e; --azul-claro: #eef4fa; --borda: #cfd8e3; --texto: #1d2733; --suave: #5b6b7d; --fundo: #f0f2f5; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, Helvetica, sans-serif; background: var(--fundo); color: var(--texto); font-size: 14px; }
+  .topo { background: var(--azul); color: #fff; padding: 14px 16px; }
+  .topo-int { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .topo h1 { font-size: 18px; }
+  .topo small { display: block; font-weight: normal; opacity: .8; font-size: 12px; margin-top: 2px; }
+  .acoes-topo { display: flex; gap: 8px; }
+  .btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 14px; border-radius: 4px; border: 1px solid transparent; font-size: 13px; font-weight: bold; cursor: pointer; text-decoration: none; }
+  .btn-novo { background: #27834a; color: #fff; }
+  .btn-novo:hover { background: #1a5c33; }
+  .btn-sair { background: transparent; color: #fff; border-color: rgba(255,255,255,.5); }
+  .conteudo { max-width: 1100px; margin: 18px auto; padding: 0 16px; }
+  .caixa { background: #fff; border: 1px solid var(--borda); border-radius: 6px; }
+  .login { max-width: 360px; margin: 60px auto; padding: 24px; }
+  .login h2 { font-size: 16px; margin-bottom: 6px; color: var(--azul); }
+  .login p { color: var(--suave); font-size: 13px; margin-bottom: 14px; }
+  input[type=password], input[type=search] { width: 100%; padding: 10px 12px; border: 1px solid var(--borda); border-radius: 4px; font-size: 15px; }
+  input:focus { outline: 2px solid var(--azul); outline-offset: 1px; }
+  .login .btn { margin-top: 10px; width: 100%; justify-content: center; background: var(--azul); color: #fff; padding: 11px; }
+  .erro { color: #a3241a; font-size: 13px; margin-top: 8px; min-height: 16px; }
+  .barra { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; flex-wrap: wrap; }
+  .barra input { flex: 1; min-width: 200px; }
+  .contagem { color: var(--suave); font-size: 13px; white-space: nowrap; }
+  table { width: 100%; border-collapse: collapse; }
+  th { text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: .03em; color: var(--suave); background: #f7f9fb; padding: 10px 12px; border-bottom: 1px solid var(--borda); }
+  td { padding: 10px 12px; border-bottom: 1px solid #edf0f4; vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: var(--azul-claro); }
+  .nome { font-weight: bold; }
+  .slug { color: var(--suave); font-size: 12px; font-family: Consolas, monospace; }
+  .num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .acoes { white-space: nowrap; text-align: right; }
+  .btn-abrir { background: var(--azul); color: #fff; padding: 7px 12px; }
+  .btn-abrir:hover { background: var(--azul-esc); }
+  .btn-copiar { background: #fff; color: var(--azul); border-color: var(--azul); padding: 7px 10px; }
+  .vazio { padding: 30px; text-align: center; color: var(--suave); }
+  .selo { display: inline-block; font-size: 11px; background: #fff7e0; color: #5c4300; border: 1px solid #e6c46a; border-radius: 10px; padding: 1px 7px; margin-left: 6px; }
+  @media (max-width: 720px) {
+    thead { display: none; }
+    table, tbody, tr, td { display: block; width: 100%; }
+    tr { padding: 10px 12px; border-bottom: 1px solid var(--borda); }
+    td { border: none; padding: 3px 0; }
+    td[data-r]::before { content: attr(data-r) ": "; color: var(--suave); font-size: 12px; }
+    .acoes { text-align: left; padding-top: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topo">
+  <div class="topo-int">
+    <h1>Entrevistas Trabalhistas<small>ODIR DE ARAUJO FILHO – ADVOCACIA</small></h1>
+    <div class="acoes-topo">
+      <a class="btn btn-novo" href="/formulario-trabalhista/">+ Nova entrevista</a>
+      <button class="btn btn-sair" id="sair" hidden>Sair</button>
+    </div>
+  </div>
+</div>
+
+<div class="conteudo">
+  <form class="caixa login" id="login" hidden>
+    <h2>Acesso restrito</h2>
+    <p>A lista tem dados de clientes. Digite a senha (fica lembrada neste aparelho).</p>
+    <input type="password" id="senha" placeholder="Senha" autocomplete="current-password" required>
+    <button class="btn" type="submit">Entrar</button>
+    <div class="erro" id="erro-login"></div>
+  </form>
+
+  <div id="lista" hidden>
+    <div class="barra">
+      <input type="search" id="busca" placeholder="Buscar por nome, CPF ou telefone…">
+      <span class="contagem" id="contagem"></span>
+    </div>
+    <div class="caixa">
+      <table>
+        <thead><tr><th>Cliente</th><th>CPF</th><th>Telefone</th><th>Atualizada</th><th></th></tr></thead>
+        <tbody id="linhas"></tbody>
+      </table>
+      <div class="vazio" id="vazio" hidden>Nenhuma entrevista encontrada.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const WEBHOOK_LISTA = 'https://gvirtus.app.n8n.cloud/webhook/entrevistas-trabalhistas-lista';
+const BASE = location.origin + '/formulario-trabalhista/';
+const CHAVE = 'gv_lista_entrevistas_senha';
+let itens = [];
+if (location.pathname.endsWith('/lista.html')) history.replaceState(null, '', BASE + 'lista');
+
+const guardar = (v) => { try { v ? localStorage.setItem(CHAVE, v) : localStorage.removeItem(CHAVE); } catch (e) {} };
+const lembrada = () => { try { return localStorage.getItem(CHAVE) || ''; } catch (e) { return ''; } };
+
+const soDigitos = (s) => String(s || '').replace(/\D/g, '');
+const fmtTel = (t) => {
+  const d = soDigitos(t);
+  if (d.length === 11) return `(${d.slice(0,2)}) ${d.slice(2,7)}-${d.slice(7)}`;
+  if (d.length === 10) return `(${d.slice(0,2)}) ${d.slice(2,6)}-${d.slice(6)}`;
+  return t || '—';
+};
+const fmtData = (s) => s ? new Date(s).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '—';
+const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+async function carregar(senha) {
+  const resp = await fetch(WEBHOOK_LISTA, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ senha }),
+  });
+  const json = await resp.json().catch(() => ({}));
+  if (!json.ok) return false;
+  itens = json.itens || [];
+  return true;
+}
+
+function render() {
+  const q = document.getElementById('busca').value.trim().toLowerCase();
+  const qd = soDigitos(q);
+  const filtrados = itens.filter((i) => !q ||
+    String(i.nome || '').toLowerCase().includes(q) || (i.slug || '').includes(q) ||
+    (qd && (soDigitos(i.cpf).includes(qd) || soDigitos(i.telefone).includes(qd))));
+  document.getElementById('linhas').innerHTML = filtrados.map((i) => {
+    const link = BASE + i.slug;
+    return `<tr>
+      <td><span class="nome">${esc(i.nome)}</span>${i.versao > 1 ? `<span class="selo">corrigida ${i.versao - 1}x</span>` : ''}<div class="slug">${esc(i.slug)}</div></td>
+      <td class="num" data-r="CPF">${esc(i.cpf || '—')}</td>
+      <td class="num" data-r="Telefone">${esc(fmtTel(i.telefone))}</td>
+      <td class="num" data-r="Atualizada">${esc(fmtData(i.atualizado_em))}</td>
+      <td class="acoes"><a class="btn btn-abrir" href="${esc(link)}">Abrir</a>
+        <button class="btn btn-copiar" data-link="${esc(link)}">Copiar link</button></td>
+    </tr>`;
+  }).join('');
+  document.getElementById('vazio').hidden = filtrados.length > 0;
+  document.getElementById('contagem').textContent = `${filtrados.length} de ${itens.length}`;
+}
+
+function mostrarLista() {
+  document.getElementById('login').hidden = true;
+  document.getElementById('lista').hidden = false;
+  document.getElementById('sair').hidden = false;
+  render();
+  document.getElementById('busca').focus();
+}
+
+function mostrarLogin(msg) {
+  document.getElementById('lista').hidden = true;
+  document.getElementById('sair').hidden = true;
+  document.getElementById('login').hidden = false;
+  document.getElementById('erro-login').textContent = msg || '';
+  document.getElementById('senha').focus();
+}
+
+document.getElementById('login').addEventListener('submit', async (ev) => {
+  ev.preventDefault();
+  const senha = document.getElementById('senha').value;
+  document.getElementById('erro-login').textContent = 'Verificando…';
+  try {
+    if (await carregar(senha)) { guardar(senha); mostrarLista(); }
+    else mostrarLogin('Senha incorreta.');
+  } catch (e) { mostrarLogin('Não foi possível conectar (' + e.message + ').'); }
+});
+
+document.getElementById('busca').addEventListener('input', render);
+document.getElementById('sair').addEventListener('click', () => { guardar(''); itens = []; mostrarLogin(); });
+document.getElementById('linhas').addEventListener('click', async (ev) => {
+  const b = ev.target.closest('.btn-copiar');
+  if (!b) return;
+  try { await navigator.clipboard.writeText(b.dataset.link); b.textContent = 'Copiado ✓'; }
+  catch (e) { prompt('Copie o link:', b.dataset.link); }
+  setTimeout(() => { b.textContent = 'Copiar link'; }, 1500);
+});
+
+(async () => {
+  const senha = lembrada();
+  if (!senha) return mostrarLogin();
+  try { (await carregar(senha)) ? mostrarLista() : (guardar(''), mostrarLogin()); }
+  catch (e) { mostrarLogin('Não foi possível conectar (' + e.message + ').'); }
+})();
+</script>
+</body>
+</html>
