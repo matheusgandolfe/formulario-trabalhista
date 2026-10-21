@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Formulário de Entrevista – Ação Trabalhista</title>
+<script>
+  // GitHub Pages não tem rotas: um link como /formulario-trabalhista/erika-silva-10720-v1
+  // cai aqui. Redireciona para a página do formulário levando o final do link em ?p=
+  (function () {
+    var base = '/formulario-trabalhista/';
+    var path = location.pathname;
+    if (path.indexOf(base) === 0 && path.length > base.length) {
+      location.replace(base + '?p=' + encodeURIComponent(path.slice(base.length)));
+    } else {
+      location.replace(base);
+    }
+  })();
+</script>
+</head>
+<body></body>
+</html>

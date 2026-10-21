@@ -694,7 +694,7 @@ async function enviarFormulario() {
     const resp = await fetch(WEBHOOK_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ html: htmlFinal, dados: coletarDados(), id: ID_EDICAO })
+      body: JSON.stringify({ html: htmlFinal, dados: coletarDados(), slug: SLUG_EDICAO })
     });
     if (resp.ok) {
       btns.forEach(b => { b.textContent = '✅ Enviado!'; b.style.background = '#27834a'; });
@@ -708,12 +708,19 @@ async function enviarFormulario() {
 }
 
 // ── EDIÇÃO (reabrir entrevista já enviada) ───────────────────────────────────
-// O link ?id=... chega no WhatsApp junto com o PDF. Os dados ficam no Supabase
-// (juridico.entrevistas_trabalhistas) e são lidos/gravados só pelo n8n.
+// Link no formato /formulario-trabalhista/nome-sobrenome-12345-v1, enviado como nota
+// interna no DataCrazy. Os dados ficam no Supabase (juridico.entrevistas_trabalhistas)
+// e são lidos/gravados só pelo n8n. O 404.html redireciona o caminho para ?p=slug.
 const WEBHOOK_ABRIR = 'https://gvirtus.app.n8n.cloud/webhook/entrevista-trabalhista';
-const ID_EDICAO = (() => {
-  const id = new URLSearchParams(location.search).get('id') || '';
-  return /^[0-9a-f-]{36}$/i.test(id) ? id : null;
+const SLUG_EDICAO = (() => {
+  const base = '/formulario-trabalhista/';
+  let slug = new URLSearchParams(location.search).get('p') || '';
+  if (!slug && location.pathname.startsWith(base)) slug = location.pathname.slice(base.length);
+  slug = decodeURIComponent(slug).replace(/^\/+|\/+$/g, '').toLowerCase();
+  if (!/^[a-z0-9-]+-v\d+$/.test(slug)) return null;
+  // deixa a barra de endereço com o link "bonito"
+  if (location.search) history.replaceState(null, '', base + slug);
+  return slug;
 })();
 
 // Guarda o estado de todos os campos na ordem em que aparecem na página
@@ -756,15 +763,15 @@ function mostrarAviso(texto, erro) {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-  if (!ID_EDICAO) return;
+  if (!SLUG_EDICAO) return;
   try {
-    const resp = await fetch(WEBHOOK_ABRIR + '?id=' + encodeURIComponent(ID_EDICAO));
+    const resp = await fetch(WEBHOOK_ABRIR + '?slug=' + encodeURIComponent(SLUG_EDICAO));
     const json = await resp.json();
     if (!resp.ok || !restaurarDados(json && json.dados)) throw new Error('não encontrada');
-    mostrarAviso('✏️ Corrigindo a entrevista de ' + (json.nome || 'cliente') +
-      '. Ajuste o que precisar e clique em Enviar: chega um PDF novo no WhatsApp.');
+    mostrarAviso('✏️ Corrigindo a entrevista de ' + (json.nome || 'cliente') + ' (' + SLUG_EDICAO +
+      '). Ajuste o que precisar e clique em Enviar: o link continua o mesmo.');
   } catch (e) {
-    mostrarAviso('Não foi possível abrir essa entrevista (' + e.message + '). Confira o link recebido no WhatsApp.', true);
+    mostrarAviso('Não foi possível abrir a entrevista "' + SLUG_EDICAO + '" (' + e.message + '). Confira o link na nota do DataCrazy.', true);
   }
 });
 </script>
