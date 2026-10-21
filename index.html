@@ -10,6 +10,8 @@
   .page-wrapper { background: #fff; width: 210mm; margin: 0 auto 30px; padding: 14mm; box-shadow: 0 2px 12px rgba(0,0,0,0.15); }
   .header-title { background: #2c5f8a; color: #fff; text-align: center; font-weight: bold; font-size: 13px; padding: 7px 4px; }
   .header-subtitle { background: #4a80aa; color: #fff; text-align: center; font-weight: bold; font-size: 12px; padding: 5px 4px; margin-top: 1px; }
+  .adv-escolha { display: flex; align-items: center; gap: 8px; justify-content: flex-end; margin: -6mm 0 8px; font-size: 12px; color: #2c5f8a; font-weight: bold; }
+  .adv-escolha select { font-size: 12px; padding: 4px 6px; border: 1px solid #2c5f8a; border-radius: 3px; background: #fff; color: #111; }
   .header-date { display: flex; justify-content: flex-end; align-items: center; padding: 5px 0 4px; font-size: 11px; gap: 6px; }
   .header-date input { border: none; border-bottom: 1px solid #333; outline: none; font-size: 11px; width: 110px; padding: 1px 2px; background: transparent; }
   .sec-header { background: #2c5f8a; color: #fff; text-align: center; font-weight: bold; font-size: 11px; padding: 4px; margin-top: 5px; page-break-after: avoid; }
@@ -60,7 +62,7 @@
   @media print {
     @page { size: A4; margin: 12mm 14mm; }
     html, body { background: #fff !important; padding: 0 !important; margin: 0 !important; }
-    .aviso-edicao, .btn-bar, .test-pergunta, #btn-add-testemunha, .btn-rem-test { display: none !important; }
+    .adv-escolha, .aviso-edicao, .btn-bar, .test-pergunta, #btn-add-testemunha, .btn-rem-test { display: none !important; }
     .page-wrapper { box-shadow: none !important; width: 100% !important; margin: 0 !important; padding: 0 !important; }
     .sec-header, .sub-header, .inline-row, .full-row, .testemunha-block, .sign-section, table tr { page-break-inside: avoid; }
     .sec-header + *, .sub-header + * { page-break-before: avoid; }
@@ -78,8 +80,16 @@
 
 <div class="page-wrapper">
 
+  <div class="adv-escolha">
+    <label for="advogado">Advogado:</label>
+    <select id="advogado" onchange="aplicarAdvogado(this.value, true)">
+      <option value="">(em branco)</option>
+      <option value="odir">Dr. Odir</option>
+      <option value="helysson">Dr. Helysson</option>
+    </select>
+  </div>
   <div class="header-title">Formulário de Entrevista – Ação Trabalhista</div>
-  <div class="header-subtitle">ODIR DE ARAUJO FILHO – ADVOCACIA</div>
+  <div class="header-subtitle" id="header-advogado" style="display:none;"></div>
   <div class="header-date">
     <strong>Data da Entrevista:</strong>
     <input type="date" name="data_entrevista" />
@@ -658,7 +668,7 @@ async function enviarFormulario() {
   });
 
   // Remove elementos de interface
-  clone.querySelectorAll('.btn-bar, .btn-add-test, .btn-rem-test, .test-pergunta, .aviso-edicao').forEach(el => el.remove());
+  clone.querySelectorAll('.btn-bar, .btn-add-test, .btn-rem-test, .test-pergunta, .aviso-edicao, .adv-escolha').forEach(el => el.remove());
 
   // Remove testemunhas se "Não" marcado
   const testNao = document.querySelector('#test_nao');
@@ -726,6 +736,31 @@ const SLUG_EDICAO = (() => {
   return slug;
 })();
 
+// ── ADVOGADO RESPONSÁVEL ─────────────────────────────────────────────────────
+// Dados conferidos nas procurações/contratos de honorários do escritório
+const ADVOGADOS = {
+  odir:     { nome: 'ODIR DE ARAUJO FILHO',          oab: 'OAB-RJ 64.645' },
+  helysson: { nome: 'HELYSSON PINHEIRO DA CONCEIÇÃO', oab: 'OAB-RJ 259.982' },
+};
+
+function aplicarAdvogado(chave, preencherAssinatura) {
+  const adv = ADVOGADOS[chave] || null;
+  const sel = document.getElementById('advogado');
+  if (sel.value !== (chave || '')) sel.value = chave || '';
+  const cab = document.getElementById('header-advogado');
+  cab.textContent = adv ? adv.nome + ' – ADVOCACIA' : '';
+  cab.style.display = adv ? '' : 'none';
+  if (!preencherAssinatura) return;
+  // só mexe na assinatura se estiver vazia ou com o nome/OAB de um dos advogados
+  const nomes = Object.values(ADVOGADOS).map(a => a.nome);
+  const oabs = Object.values(ADVOGADOS).map(a => a.oab);
+  const campoNome = document.querySelector('[name="assin_adv_nome"]');
+  const campoOab = document.querySelector('[name="assin_adv_oab"]');
+  if (campoNome && (!campoNome.value || nomes.includes(campoNome.value))) campoNome.value = adv ? adv.nome : '';
+  if (campoOab && (!campoOab.value || oabs.includes(campoOab.value))) campoOab.value = adv ? adv.oab : '';
+  [campoNome, campoOab].forEach(el => el && el.tagName === 'TEXTAREA' && autoResize(el));
+}
+
 // Guarda o estado de todos os campos na ordem em que aparecem na página
 function coletarDados() {
   const campos = [];
@@ -733,7 +768,8 @@ function coletarDados() {
     campos.push(el.type === 'checkbox' || el.type === 'radio' ? el.checked : el.value);
   });
   const testemunhas = document.querySelectorAll('#testemunhas-container .testemunha-block').length;
-  return { v: 1, testemunhas, campos };
+  const advogado = document.getElementById('advogado').value;
+  return { v: 1, testemunhas, campos, advogado };
 }
 
 function restaurarDados(dados) {
@@ -752,6 +788,7 @@ function restaurarDados(dados) {
     if (el.type === 'checkbox' || el.type === 'radio') el.checked = !!v;
     else el.value = v;
   });
+  aplicarAdvogado(dados.advogado || '', false);
   document.querySelectorAll('textarea.auto-input').forEach(autoResize);
   return true;
 }
