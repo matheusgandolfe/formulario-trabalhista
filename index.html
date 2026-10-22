@@ -802,6 +802,7 @@ function adicionarTestemunha() {
     </div>
     <div class="t-fields">
       <div class="field"><label>Nome completo:</label><input type="text" name="test_nome" /></div>
+      <div class="field"><label>Função:</label><input type="text" name="test_funcao" /></div>
       <div class="field"><label>CPF:</label><input type="text" name="test_cpf" /></div>
       <div class="field"><label>Endereço:</label><input type="text" name="test_endereco" /></div>
       <div class="field"><label>Contato (telefone/e-mail):</label><input type="text" name="test_contato" /></div>
@@ -987,15 +988,22 @@ function aplicarAdvogado(chave, preencherAssinatura) {
   [campoNome, campoOab].forEach(el => el && el.tagName === 'TEXTAREA' && autoResize(el));
 }
 
+// Campos guardados à parte (fora da lista por posição), para não desalinhar entrevistas já salvas
+const CAMPOS_EXTRA = ['test_funcao'];
+const camposPorPosicao = () => Array.from(document.querySelectorAll('textarea, input'))
+  .filter(el => !CAMPOS_EXTRA.includes(el.name));
+
 // Guarda o estado de todos os campos na ordem em que aparecem na página
 function coletarDados() {
   const campos = [];
-  document.querySelectorAll('textarea, input').forEach(el => {
+  camposPorPosicao().forEach(el => {
     campos.push(el.type === 'checkbox' || el.type === 'radio' ? el.checked : el.value);
   });
   const testemunhas = document.querySelectorAll('#testemunhas-container .testemunha-block').length;
   const advogado = document.getElementById('advogado').value;
-  return { v: 1, testemunhas, campos, advogado };
+  const extras = {};
+  CAMPOS_EXTRA.forEach(n => { extras[n] = Array.from(document.querySelectorAll('[name="' + n + '"]')).map(el => el.value); });
+  return { v: 1, testemunhas, campos, advogado, extras };
 }
 
 function restaurarDados(dados) {
@@ -1007,12 +1015,16 @@ function restaurarDados(dados) {
     toggleTestemunhas(sim);
     for (let i = 1; i < dados.testemunhas; i++) adicionarTestemunha();
   }
-  const els = document.querySelectorAll('textarea, input');
+  const els = camposPorPosicao();
   els.forEach((el, i) => {
     const v = dados.campos[i];
     if (v === undefined) return;
     if (el.type === 'checkbox' || el.type === 'radio') el.checked = !!v;
     else el.value = v;
+  });
+  const extras = dados.extras || {};
+  CAMPOS_EXTRA.forEach(n => {
+    (extras[n] || []).forEach((v, i) => { const el = document.querySelectorAll('[name="' + n + '"]')[i]; if (el) el.value = v; });
   });
   aplicarAdvogado(dados.advogado || '', false);
   document.querySelectorAll('textarea.auto-input').forEach(autoResize);
