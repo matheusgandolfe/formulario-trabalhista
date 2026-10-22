@@ -142,6 +142,129 @@
     .sec-header + *, .sub-header + * { page-break-before: avoid; }
     * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
   }
+
+  /* ══ Página do cliente: visual (só vale com body.modo-cliente) ══════════════ */
+  body.modo-cliente {
+    --gv-tinta: #18302A; --gv-suave: #4F625C; --gv-verde: #1E5A4C; --gv-verde-esc: #164338;
+    --gv-verde-claro: #E4F0EB; --gv-fundo: #F1F4F2; --gv-linha: #CDD8D3; --gv-erro: #A3241A;
+    background: var(--gv-fundo); color: var(--gv-tinta); padding: 0;
+    font-family: 'Atkinson Hyperlegible', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  body.modo-cliente .page-wrapper {
+    max-width: 640px; width: auto; margin: 0 auto; padding: 0 20px 24px; background: transparent;
+    box-shadow: none; border-radius: 0; font-size: 17px; line-height: 1.45;
+  }
+  body.modo-cliente .header-title { display: none; }
+  body.modo-cliente .gv-topo { display: flex; align-items: baseline; gap: 10px; padding: 18px 0 14px; border-bottom: 1px solid var(--gv-linha); }
+  body.modo-cliente .gv-marca { font-weight: 700; font-size: 18px; color: var(--gv-verde); letter-spacing: .01em; }
+  body.modo-cliente .gv-sub { font-size: 15px; color: var(--gv-suave); }
+
+  /* boas-vindas */
+  body.modo-cliente .em-boas-vindas .wizard-topo, body.modo-cliente .em-boas-vindas .wizard-nav,
+  body.modo-cliente .em-boas-vindas .etapa { display: none !important; }
+  body.modo-cliente .gv-boas-vindas { padding: 36px 0 12px; }
+  body.modo-cliente .gv-boas-vindas h1 { font-size: 34px; line-height: 1.12; font-weight: 700; margin-bottom: 14px; color: var(--gv-tinta); }
+  body.modo-cliente .bv-intro { font-size: 19px; color: var(--gv-suave); margin-bottom: 26px; max-width: 34em; }
+  body.modo-cliente .bv-lista { list-style: none; padding: 0; margin: 0 0 30px; border-top: 1px solid var(--gv-linha); }
+  body.modo-cliente .bv-lista li { padding: 16px 0 16px 34px; border-bottom: 1px solid var(--gv-linha); position: relative; font-size: 17px; }
+  body.modo-cliente .bv-lista li::before { content: ''; position: absolute; left: 4px; top: 22px; width: 12px; height: 12px; border-radius: 50%; background: var(--gv-verde); }
+  body.modo-cliente .bv-lista strong { display: block; margin-bottom: 2px; }
+  body.modo-cliente .bv-comecar { width: 100%; }
+
+  /* cabeçalho de cada parte */
+  body.modo-cliente .wizard-topo { margin: 26px 0 8px; }
+  body.modo-cliente .wizard-passo { gap: 6px; margin-bottom: 14px; }
+  body.modo-cliente .wizard-passo span { font-size: 15px; color: var(--gv-suave); font-weight: 400; text-transform: none; letter-spacing: 0; }
+  body.modo-cliente .wizard-passo strong { font-size: 28px; line-height: 1.15; color: var(--gv-tinta); }
+  body.modo-cliente .wizard-barra { height: 6px; background: var(--gv-linha); border-radius: 3px; }
+  body.modo-cliente .wizard-barra div { background: var(--gv-verde); border-radius: 3px; transition: width .35s ease; }
+  body.modo-cliente .aviso-continuar { max-width: none; margin: 16px 0 0; background: var(--gv-verde-claro); border: 0; color: var(--gv-tinta); border-radius: 10px; font-size: 15px; }
+  body.modo-cliente .aviso-continuar button { color: var(--gv-verde); font-size: 15px; font-weight: 700; }
+
+  /* campos: rótulo em cima, caixa grande embaixo */
+  body.modo-cliente .etapa table, body.modo-cliente .etapa tbody, body.modo-cliente .etapa tr, body.modo-cliente .etapa td { display: block; width: 100%; border: 0; background: none; }
+  body.modo-cliente .etapa td.lbl { padding: 18px 0 7px; font-size: 16px; font-weight: 700; color: var(--gv-tinta); white-space: normal; }
+  body.modo-cliente .etapa td.val { padding: 0; }
+  body.modo-cliente .sub-header { background: none; border: 0; text-align: left; font-size: 19px; padding: 26px 0 0; color: var(--gv-tinta); }
+  body.modo-cliente .auto-input, body.modo-cliente input[type="date"], body.modo-cliente input[type="text"] {
+    width: 100%; box-sizing: border-box; font: inherit; font-size: 17px; color: var(--gv-tinta);
+    background: #fff; border: 1.5px solid var(--gv-linha) !important; border-radius: 10px; padding: 12px 14px; min-height: 50px;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  body.modo-cliente input[type="date"] { flex: 0 0 auto !important; width: auto; min-width: 190px; }
+  body.modo-cliente .auto-input:focus, body.modo-cliente input[type="date"]:focus {
+    outline: none; border-color: var(--gv-verde) !important; box-shadow: 0 0 0 4px rgba(30, 90, 76, .16);
+  }
+  body.modo-cliente .inline-row, body.modo-cliente .full-row {
+    border: 0; border-bottom: 1px solid var(--gv-linha); background: none; padding: 18px 0; margin: 0; font-size: 17px; gap: 10px 8px;
+  }
+  body.modo-cliente .inline-row > span:not(.opcao) { flex-basis: 100%; font-weight: 700; }
+  body.modo-cliente .inline-row .auto-input { flex: 1 1 100%; border-bottom: 1.5px solid var(--gv-linha); }
+  body.modo-cliente .full-row .row-label { font-size: 16px; margin-bottom: 8px; }
+  body.modo-cliente .info-box { border: 0; padding: 18px 0 0; background: none; }
+
+  /* Sim / Não e opções: botões de toque */
+  body.modo-cliente .opcao {
+    margin: 0; padding: 10px 16px 10px 12px; gap: 9px; background: #fff; border: 1.5px solid var(--gv-linha);
+    border-radius: 999px; cursor: pointer; transition: background .15s, border-color .15s; min-height: 46px; box-sizing: border-box;
+  }
+  body.modo-cliente .opcao:has(input:checked) { background: var(--gv-verde-claro); border-color: var(--gv-verde); }
+  body.modo-cliente .opcao:has(input:focus-visible) { box-shadow: 0 0 0 4px rgba(30, 90, 76, .2); }
+  body.modo-cliente .opcao input { accent-color: var(--gv-verde); width: 20px; height: 20px; margin: 0; }
+  body.modo-cliente .opcao { max-width: 100%; }
+  body.modo-cliente .opcao label { font-size: 16px; white-space: normal; line-height: 1.3; }
+
+  /* testemunhas e assinatura */
+  body.modo-cliente .testemunha-block { border: 1.5px solid var(--gv-linha); border-radius: 12px; background: #fff; padding: 14px; margin-top: 14px; }
+  body.modo-cliente .btn-add-test { background: none; color: var(--gv-verde); border: 1.5px dashed var(--gv-verde); border-radius: 10px; padding: 12px 16px; font-size: 16px; margin-top: 12px; }
+  body.modo-cliente .sign-box { border: 0; padding: 0; background: none; }
+  body.modo-cliente .sign-grid { background: none; }
+  body.modo-cliente .sign-title, body.modo-cliente .sign-area, body.modo-cliente .sign-box > div[style] { display: none; }
+  body.modo-cliente .sign-fields .field { margin-top: 14px; }
+  body.modo-cliente .sign-fields .field label { font-size: 16px !important; color: var(--gv-tinta) !important; margin-bottom: 7px !important; }
+  body.modo-cliente .sign-section > div[style*="background:#f9f9f9"] { border: 0 !important; background: var(--gv-verde-claro) !important; border-radius: 10px; font-size: 15px !important; color: var(--gv-tinta) !important; padding: 14px 16px !important; margin-top: 20px !important; }
+
+  /* rodapé com Voltar / Continuar, fixo no celular */
+  body.modo-cliente .wizard-nav {
+    position: sticky; bottom: 0; z-index: 5; margin: 26px -20px 0; padding: 14px 20px calc(14px + env(safe-area-inset-bottom));
+    background: rgba(241, 244, 242, .96); border-top: 1px solid var(--gv-linha); backdrop-filter: blur(6px);
+  }
+  body.modo-cliente .wizard-nav button { font: inherit; font-size: 17px; font-weight: 700; border-radius: 12px; padding: 14px 22px; min-height: 52px; }
+  body.modo-cliente .wz-voltar { background: transparent; color: var(--gv-verde); border: 1.5px solid var(--gv-linha) !important; }
+  body.modo-cliente .wz-proximo, body.modo-cliente .wz-enviar { background: var(--gv-verde); color: #fff; flex: 1; max-width: 320px; margin-left: auto; border: 0; }
+  body.modo-cliente .wz-proximo:hover, body.modo-cliente .wz-enviar:hover { background: var(--gv-verde-esc); }
+  body.modo-cliente .wizard-nav button:focus-visible, body.modo-cliente .bv-comecar:focus-visible { outline: 3px solid var(--gv-verde); outline-offset: 3px; }
+  body.modo-cliente .bv-comecar { font: inherit; font-size: 18px; font-weight: 700; border-radius: 12px; padding: 16px; border: 0; background: var(--gv-verde); color: #fff; cursor: pointer; }
+  body.modo-cliente .wz-erro { color: var(--gv-erro); font-size: 16px; }
+  body.modo-cliente .wz-salvo { flex-basis: 100%; order: 3; font-size: 14px; color: var(--gv-suave); text-align: right; min-height: 0; }
+  body.modo-cliente .wz-salvo:empty { display: none; }
+  body.modo-cliente .wz-salvo-offline { color: #8A5A00; text-align: left; }
+  body.modo-cliente .campo-erro { outline: 0; background: none !important; }
+  body.modo-cliente .campo-erro .auto-input { border-color: var(--gv-erro) !important; box-shadow: 0 0 0 4px rgba(163, 36, 26, .12); }
+
+  /* troca de parte: entra suave (desligado para quem pede menos movimento) */
+  body.modo-cliente .etapa-entra { animation: gvEntra .28s ease both; }
+  @keyframes gvEntra { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    body.modo-cliente .etapa-entra { animation: none; }
+    body.modo-cliente .wizard-barra div, body.modo-cliente .opcao { transition: none; }
+  }
+
+  /* tela final */
+  body.modo-cliente .wizard-fim { text-align: left; padding: 48px 0 20px; }
+  body.modo-cliente .wizard-fim .wz-check { width: 64px; height: 64px; border-radius: 50%; background: var(--gv-verde); color: #fff; display: grid; place-items: center; font-size: 0; }
+  body.modo-cliente .wizard-fim h2 { font-size: 30px; margin: 22px 0 10px; color: var(--gv-tinta); }
+  body.modo-cliente .wizard-fim p { font-size: 18px; color: var(--gv-suave); max-width: 30em; }
+
+  @media (max-width: 600px) {
+    body.modo-cliente { background: var(--gv-fundo); }
+    body.modo-cliente .page-wrapper { padding: 0 16px 0; }
+    body.modo-cliente .gv-boas-vindas h1 { font-size: 29px; }
+    body.modo-cliente .wizard-passo strong { font-size: 24px; }
+    body.modo-cliente .wizard-nav { margin: 22px -16px 0; padding-left: 16px; padding-right: 16px; }
+    body.modo-cliente .wz-proximo, body.modo-cliente .wz-enviar { max-width: none; }
+  }
 </style>
 </head>
 <body>
@@ -743,7 +866,8 @@ function gerarHtmlFinal() {
   });
 
   // Remove elementos de interface
-  clone.querySelectorAll('.btn-bar, .btn-add-test, .btn-rem-test, .test-pergunta, .aviso-edicao, .adv-escolha, .modal-lista, .wizard-topo, .wizard-nav, .wizard-fim').forEach(el => el.remove());
+  clone.querySelectorAll('.btn-bar, .btn-add-test, .btn-rem-test, .test-pergunta, .aviso-edicao, .adv-escolha, .modal-lista, .wizard-topo, .wizard-nav, .wizard-fim, .gv-topo, .gv-boas-vindas, .aviso-continuar').forEach(el => el.remove());
+  clone.querySelectorAll('.em-boas-vindas').forEach(el => el.classList.remove('em-boas-vindas'));
   // O código da página não vai junto (o sistema só usa o conteúdo; deixa o envio leve)
   clone.querySelectorAll('script').forEach(el => el.remove());
   // Página do cliente: o documento enviado mostra todas as etapas, sem o layout de celular
@@ -804,7 +928,7 @@ async function enviarFormulario() {
       throw new Error('Erro ' + resp.status);
     }
   } catch (err) {
-    btns.forEach(b => { b.disabled = false; b.textContent = '📤 Enviar para o Sistema'; });
+    btns.forEach(b => { b.disabled = false; b.textContent = b.dataset.rotulo || '📤 Enviar para o Sistema'; });
     alert('Erro ao enviar: ' + err.message);
   }
 }
@@ -970,6 +1094,10 @@ const gravarLocal = (v) => { try { v ? localStorage.setItem(CHAVE_RASCUNHO_LOCAL
 
 function montarEtapas() {
   document.body.classList.add('modo-cliente');
+  const fonte = document.createElement('link');
+  fonte.rel = 'stylesheet';
+  fonte.href = 'https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap';
+  document.head.appendChild(fonte);
   const wrapper = document.querySelector('.page-wrapper');
   const filhos = Array.from(wrapper.children);
   const grupos = [];
@@ -993,6 +1121,12 @@ function montarEtapas() {
     const sub = grupos[0].els.find((e) => e.classList.contains('sub-header'));
     if (sub) grupos[0].titulo = grupos[0].titulo + ' – ' + sub.textContent.trim().replace(/:$/, '');
   }
+  // títulos em linguagem do cliente (mesma ordem das seções do formulário)
+  const TITULOS = ['Seus dados', 'Dados da empresa', 'Seu contrato de trabalho', 'Se você não tinha carteira assinada',
+    'Jornada e horas extras', 'O que você recebeu na saída', 'Humilhação e constrangimento no trabalho',
+    'Ambiente de trabalho e riscos', 'Documentos que você tem', 'Outras provas', 'Testemunhas',
+    'Quer contar mais alguma coisa?', 'Confirmação'];
+  if (grupos.length === TITULOS.length) grupos.forEach((g, n) => { g.titulo = TITULOS[n]; });
   ETAPAS = grupos.map((g) => {
     const div = document.createElement('div');
     div.className = 'etapa etapa-oculta';
@@ -1017,6 +1151,11 @@ function montarEtapas() {
   const boxes = document.querySelectorAll('.sign-box');
   if (boxes[1]) boxes[1].classList.add('so-interno');
 
+  const marca = document.createElement('div');
+  marca.className = 'gv-topo';
+  marca.innerHTML = '<span class="gv-marca">Grupo GV</span><span class="gv-sub">Entrevista trabalhista</span>';
+  wrapper.insertBefore(marca, wrapper.firstChild);
+
   const topo = document.createElement('div');
   topo.className = 'wizard-topo';
   topo.innerHTML = '<div class="wizard-passo"><span id="wz-num"></span><strong id="wz-titulo"></strong></div>' +
@@ -1026,9 +1165,10 @@ function montarEtapas() {
   const nav = document.createElement('div');
   nav.className = 'wizard-nav';
   nav.innerHTML = '<div class="wz-erro" id="wz-erro"></div>' +
-    '<button type="button" class="wz-voltar" id="wz-voltar">← Voltar</button>' +
-    '<button type="button" class="wz-proximo" id="wz-proximo">Próximo →</button>' +
-    '<button type="button" class="wz-enviar send-btn" id="wz-enviar">📤 Enviar para o Sistema</button>';
+    '<button type="button" class="wz-voltar" id="wz-voltar">Voltar</button>' +
+    '<button type="button" class="wz-proximo" id="wz-proximo">Continuar</button>' +
+    '<button type="button" class="wz-enviar send-btn" id="wz-enviar" data-rotulo="Enviar respostas">Enviar respostas</button>' +
+    '<div class="wz-salvo" id="wz-salvo" aria-live="polite"></div>';
   wrapper.appendChild(nav);
   document.getElementById('wz-voltar').addEventListener('click', () => irPara(etapaAtual - 1));
   document.getElementById('wz-proximo').addEventListener('click', proximaEtapa);
@@ -1041,9 +1181,9 @@ function montarEtapas() {
     restaurarDados(local.dados);
     irPara(Math.min(local.etapa || 0, ETAPAS.length - 1));
     const aviso = document.createElement('div');
-    aviso.className = 'aviso-edicao aviso-continuar';
-    aviso.innerHTML = '✏️ Continuando de onde você parou. <button type="button" id="wz-zerar">Começar do zero</button>';
-    wrapper.parentNode.insertBefore(aviso, wrapper);
+    aviso.className = 'aviso-continuar';
+    aviso.innerHTML = 'Você continuou de onde parou. <button type="button" id="wz-zerar">Começar do zero</button>';
+    wrapper.insertBefore(aviso, topo);
     document.getElementById('wz-zerar').addEventListener('click', () => {
       if (!confirm('Apagar o que foi preenchido neste aparelho e começar do zero?')) return;
       gravarLocal(null); location.reload();
@@ -1051,12 +1191,46 @@ function montarEtapas() {
   } else {
     CHAVE_CLIENTE = novaChave();
     irPara(0);
+    mostrarBoasVindas(wrapper);
   }
 
   // guarda no aparelho enquanto digita (sem esperar o "Próximo")
   let t = null;
   document.addEventListener('input', () => { clearTimeout(t); t = setTimeout(salvarLocal, 600); });
   document.addEventListener('change', () => { clearTimeout(t); t = setTimeout(salvarLocal, 600); });
+}
+
+// Tela de abertura: diz quanto tempo leva e que dá para parar e continuar depois
+function mostrarBoasVindas(wrapper) {
+  wrapper.classList.add('em-boas-vindas');
+  const bv = document.createElement('section');
+  bv.className = 'gv-boas-vindas';
+  bv.innerHTML =
+    '<h1>Vamos registrar o seu caso</h1>' +
+    '<p class="bv-intro">São perguntas sobre o seu trabalho, divididas em ' + ETAPAS.length + ' partes curtas. ' +
+    'Leva uns 15 minutos.</p>' +
+    '<ul class="bv-lista">' +
+    '<li><strong>Pode parar quando quiser.</strong> Cada parte fica salva. Para continuar, é só abrir este mesmo link no mesmo celular.</li>' +
+    '<li><strong>Só três respostas são obrigatórias:</strong> nome, CPF e telefone. O resto, responda o que souber.</li>' +
+    '<li><strong>Na dúvida, escreva do seu jeito.</strong> Nossa equipe revisa tudo com você depois.</li>' +
+    '</ul>' +
+    '<button type="button" class="wz-proximo bv-comecar" id="bv-comecar">Começar</button>';
+  wrapper.insertBefore(bv, wrapper.querySelector('.wizard-topo'));
+  document.getElementById('bv-comecar').addEventListener('click', () => {
+    bv.remove();
+    wrapper.classList.remove('em-boas-vindas');
+    irPara(0);
+    const primeiro = ETAPAS[0].querySelector('textarea, input');
+    if (primeiro) primeiro.focus({ preventScroll: true });
+  });
+}
+
+function marcarSalvo(ok) {
+  const el = document.getElementById('wz-salvo');
+  if (!el) return;
+  const hora = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+  el.textContent = ok ? 'Salvo às ' + hora : 'Sem internet agora. Suas respostas estão guardadas neste celular.';
+  el.classList.toggle('wz-salvo-offline', !ok);
 }
 
 function salvarLocal() {
@@ -1067,7 +1241,7 @@ function irPara(i) {
   if (i < 0 || i >= ETAPAS.length) return;
   etapaAtual = i;
   ETAPAS.forEach((e, n) => e.classList.toggle('etapa-oculta', n !== i));
-  document.getElementById('wz-num').textContent = 'Etapa ' + (i + 1) + ' de ' + ETAPAS.length;
+  document.getElementById('wz-num').textContent = 'Parte ' + (i + 1) + ' de ' + ETAPAS.length;
   document.getElementById('wz-titulo').textContent = ETAPAS[i].dataset.titulo;
   document.getElementById('wz-barra').style.width = Math.round((i + 1) / ETAPAS.length * 100) + '%';
   document.getElementById('wz-voltar').style.visibility = i === 0 ? 'hidden' : 'visible';
@@ -1076,6 +1250,7 @@ function irPara(i) {
   document.getElementById('wz-enviar').style.display = ultima ? '' : 'none';
   document.getElementById('wz-erro').textContent = '';
   document.querySelectorAll('textarea.auto-input').forEach(autoResize);
+  ETAPAS[i].classList.remove('etapa-entra'); void ETAPAS[i].offsetWidth; ETAPAS[i].classList.add('etapa-entra');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -1117,7 +1292,7 @@ function salvarRascunho() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ html: gerarHtmlFinal(), dados: coletarDados(), rascunho: true,
                              chave: CHAVE_CLIENTE, etapa: etapaAtual + 1, total_etapas: ETAPAS.length }),
-    }).catch(() => {});
+    }).then((r) => marcarSalvo(r.ok)).catch(() => marcarSalvo(false));
   } catch (e) {}
 }
 
@@ -1125,12 +1300,13 @@ function concluirCliente() {
   gravarLocal(null);
   const wrapper = document.querySelector('.page-wrapper');
   ETAPAS.forEach((e) => e.classList.add('etapa-oculta'));
-  wrapper.querySelectorAll('.wizard-topo, .wizard-nav').forEach((e) => { e.style.display = 'none'; });
+  wrapper.querySelectorAll('.wizard-topo, .wizard-nav, .aviso-continuar').forEach((e) => { e.style.display = 'none'; });
   document.querySelectorAll('.aviso-continuar').forEach((e) => e.remove());
   const fim = document.createElement('div');
   fim.className = 'wizard-fim';
-  fim.innerHTML = '<div class="wz-check">✅</div><h2>Recebemos suas informações!</h2>' +
-                  '<p>Obrigado. Nossa equipe vai analisar e entrar em contato pelo WhatsApp.</p>';
+  fim.innerHTML = '<div class="wz-check" aria-hidden="true"><svg viewBox="0 0 24 24" width="34" height="34"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>' +
+                  '<h2>Respostas enviadas</h2>' +
+                  '<p>Obrigado. Nossa equipe vai analisar o seu caso e falar com você pelo WhatsApp.</p>';
   wrapper.appendChild(fim);
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
