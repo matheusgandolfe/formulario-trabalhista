@@ -2,6 +2,20 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
+<script>
+  // Link antigo (GitHub) -> domínio próprio, mantendo o resto do endereço
+  (function () {
+    if (!location.hostname.endsWith('github.io')) return;
+    var resto = location.pathname.replace(/^\/formulario-trabalhista\/?/, '');
+    var q = new URLSearchParams(location.search);
+    if (q.get('p')) { resto = q.get('p'); q.delete('p'); }
+    if (resto === 'index.html') resto = '';
+    if (resto === 'lista.html') resto = 'lista';
+    var qs = q.toString();
+    location.replace('https://entrevista.grupogv.app.br/' + resto + (qs ? '?' + qs : '') + location.hash);
+  })();
+</script>
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Formulário de Entrevista – Ação Trabalhista</title>
 <style>

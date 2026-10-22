@@ -4,19 +4,15 @@
 <meta charset="UTF-8">
 <title>Formulário de Entrevista – Ação Trabalhista</title>
 <script>
-  // GitHub Pages não tem rotas: um link como /formulario-trabalhista/erika-silva-10720-v1
-  // cai aqui. Redireciona para a página do formulário levando o final do link em ?p=
+  // Link antigo (GitHub Pages, /formulario-trabalhista/...) -> domínio próprio, mantendo o final do link.
+  // No domínio próprio (Vercel) as rotas são resolvidas pelo vercel.json; endereço desconhecido volta pro início.
   (function () {
-    var base = '/formulario-trabalhista/';
-    var path = location.pathname;
-    var resto = path.indexOf(base) === 0 ? path.slice(base.length).replace(/\/+$/, '') : '';
-    // "interno" e os links de entrevista caem no ?p= e abrem a página completa
-    if (resto === 'lista') {
-      location.replace(base + 'lista.html');
-    } else if (resto) {
-      location.replace(base + '?p=' + encodeURIComponent(path.slice(base.length)));
+    if (location.hostname.endsWith('github.io')) {
+      var resto = location.pathname.replace(/^\/formulario-trabalhista\/?/, '');
+      if (resto === 'lista.html') resto = 'lista';
+      location.replace('https://entrevista.grupogv.app.br/' + resto + location.search + location.hash);
     } else {
-      location.replace(base);
+      location.replace('/');
     }
   })();
 </script>
