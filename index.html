@@ -66,6 +66,59 @@
   .modal-fechar { background: #2c5f8a; color: #fff; border: none; border-radius: 4px; padding: 8px 14px; font-size: 13px; font-weight: bold; cursor: pointer; }
   .modal-caixa iframe { flex: 1; width: 100%; border: 0; }
   body.modal-aberto { overflow: hidden; }
+
+  /* ── Página do cliente (uma etapa por vez) ── */
+  .etapa-oculta { display: none !important; }
+  body.modo-cliente { padding: 12px; }
+  body.modo-cliente .page-wrapper { width: auto; max-width: 210mm; padding: 22px; font-size: 14px; border-radius: 6px; }
+  body.modo-cliente .btn-bar, body.modo-cliente .adv-escolha, body.modo-cliente .so-interno,
+  body.modo-cliente .header-date, body.modo-cliente .header-subtitle { display: none !important; }
+  body.modo-cliente .header-title { font-size: 15px; border-radius: 4px; }
+  body.modo-cliente .sec-header { font-size: 14px; padding: 8px; border-radius: 4px 4px 0 0; }
+  body.modo-cliente .sub-header, body.modo-cliente td, body.modo-cliente .inline-row, body.modo-cliente .full-row,
+  body.modo-cliente .info-box, body.modo-cliente .testemunha-block, body.modo-cliente .sign-box { font-size: 14px; }
+  body.modo-cliente .inline-row, body.modo-cliente .full-row { padding: 9px 10px; gap: 8px; line-height: 1.5; }
+  body.modo-cliente .lbl { white-space: normal; width: 34%; }
+  body.modo-cliente .auto-input, body.modo-cliente input[type="date"], body.modo-cliente input[type="text"] { font-size: 16px; min-height: 28px; }
+  body.modo-cliente input[type="checkbox"], body.modo-cliente input[type="radio"] { width: 20px; height: 20px; vertical-align: middle; }
+  body.modo-cliente .inline-row label { white-space: normal; }
+  body.modo-cliente .opcao { display: inline-flex; align-items: center; gap: 6px; margin-right: 14px; padding: 3px 0; }
+  body.modo-cliente .opcao label { cursor: pointer; }
+  body.modo-cliente .btn-add-test { font-size: 14px; padding: 9px 16px; }
+  body.modo-cliente .sign-grid { display: block; }
+  .campo-erro { outline: 2px solid #c0392b; outline-offset: -2px; background: #fdecea !important; }
+  .wizard-topo { margin: 14px 0 12px; }
+  .wizard-passo { display: flex; flex-direction: column; gap: 2px; margin-bottom: 8px; }
+  .wizard-passo span { font-size: 12px; color: #5b6b7d; font-weight: bold; text-transform: uppercase; letter-spacing: .04em; }
+  .wizard-passo strong { font-size: 17px; color: #1d2733; }
+  .wizard-barra { height: 8px; background: #e3e9f0; border-radius: 4px; overflow: hidden; }
+  .wizard-barra div { height: 100%; width: 0; background: #27834a; transition: width .25s; }
+  .wizard-nav { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; margin-top: 18px; padding-top: 14px; border-top: 1px solid #e3e9f0; }
+  .wizard-nav .wz-erro { flex-basis: 100%; color: #a3241a; font-weight: bold; font-size: 14px; min-height: 0; }
+  .wizard-nav .wz-erro:empty { display: none; }
+  .wizard-nav button { font-size: 16px; font-weight: bold; padding: 13px 22px; border-radius: 6px; cursor: pointer; border: 1px solid transparent; }
+  .wz-voltar { background: #fff; color: #2c5f8a; border-color: #2c5f8a !important; }
+  .wz-proximo { background: #2c5f8a; color: #fff; margin-left: auto; }
+  .wz-enviar { background: #27834a; color: #fff; margin-left: auto; }
+  .wz-enviar:disabled { background: #888; }
+  /* o título da etapa já aparece no topo: esconde o cabeçalho repetido da seção */
+  body.modo-cliente .etapa > .sec-header, body.modo-cliente .etapa > .sec-header + .sub-header,
+  body.modo-cliente .etapa > .sub-header:first-child, body.modo-cliente .sign-section > .sec-header { display: none; }
+  .aviso-continuar { max-width: 210mm; margin: 0 auto 10px; padding: 10px 14px; border-radius: 6px; font-size: 14px;
+                     background: #fff7e0; border: 1px solid #e6c46a; color: #5c4300; }
+  .aviso-continuar button { margin-left: 8px; background: none; border: none; color: #5c4300; text-decoration: underline; font-size: 13px; cursor: pointer; }
+  .wizard-fim { text-align: center; padding: 40px 10px; }
+  .wizard-fim .wz-check { font-size: 48px; }
+  .wizard-fim h2 { margin: 10px 0 6px; color: #1d2733; font-size: 20px; }
+  .wizard-fim p { color: #5b6b7d; font-size: 15px; }
+  @media (max-width: 600px) {
+    body.modo-cliente { padding: 0; background: #fff; }
+    body.modo-cliente .page-wrapper { padding: 14px; box-shadow: none; border-radius: 0; }
+    body.modo-cliente table, body.modo-cliente tbody, body.modo-cliente tr, body.modo-cliente td { display: block; width: 100%; }
+    body.modo-cliente td.lbl { width: 100%; background: none; border: none; padding: 10px 0 3px; font-size: 13px; }
+    body.modo-cliente td.val { border: 1px solid #aaa; border-radius: 4px; padding: 6px 8px; }
+    .wizard-nav button { flex: 1; }
+  }
   @media print {
     @page { size: A4; margin: 12mm 14mm; }
     html, body { background: #fff !important; padding: 0 !important; margin: 0 !important; }
@@ -650,9 +703,10 @@ function renumerarTestemunhas() {
 }
 
 // ── ENVIO WEBHOOK ────────────────────────────────────────────────────────────
-async function enviarFormulario() {
-  const WEBHOOK_URL = 'https://gvirtus.app.n8n.cloud/webhook/d9818df8-d082-450d-a313-832865835302';
+const WEBHOOK_URL = 'https://gvirtus.app.n8n.cloud/webhook/d9818df8-d082-450d-a313-832865835302';
 
+// Monta o HTML estático (com os valores preenchidos) que vai para o sistema
+function gerarHtmlFinal() {
   // Clona o documento
   const clone = document.documentElement.cloneNode(true);
 
@@ -675,7 +729,11 @@ async function enviarFormulario() {
   });
 
   // Remove elementos de interface
-  clone.querySelectorAll('.btn-bar, .btn-add-test, .btn-rem-test, .test-pergunta, .aviso-edicao, .adv-escolha, .modal-lista').forEach(el => el.remove());
+  clone.querySelectorAll('.btn-bar, .btn-add-test, .btn-rem-test, .test-pergunta, .aviso-edicao, .adv-escolha, .modal-lista, .wizard-topo, .wizard-nav, .wizard-fim').forEach(el => el.remove());
+  // Página do cliente: o documento enviado mostra todas as etapas, sem o layout de celular
+  clone.querySelectorAll('.etapa-oculta').forEach(el => el.classList.remove('etapa-oculta'));
+  const corpoClone = clone.querySelector('body');
+  if (corpoClone) corpoClone.classList.remove('modo-cliente');
 
   // Remove testemunhas se "Não" marcado
   const testNao = document.querySelector('#test_nao');
@@ -705,7 +763,11 @@ async function enviarFormulario() {
     inp.parentNode.replaceChild(span, inp);
   });
 
-  const htmlFinal = '<!DOCTYPE html>\n' + clone.outerHTML;
+  return '<!DOCTYPE html>\n' + clone.outerHTML;
+}
+
+async function enviarFormulario() {
+  const htmlFinal = gerarHtmlFinal();
 
   const btns = document.querySelectorAll('.send-btn');
   btns.forEach(b => { b.disabled = true; b.textContent = '⏳ Enviando...'; });
@@ -714,11 +776,14 @@ async function enviarFormulario() {
     const resp = await fetch(WEBHOOK_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ html: htmlFinal, dados: coletarDados(), slug: SLUG_EDICAO })
+      body: JSON.stringify({ html: htmlFinal, dados: coletarDados(), slug: SLUG_EDICAO,
+                             chave: MODO_INTERNO ? null : CHAVE_CLIENTE,
+                             etapa: MODO_INTERNO ? null : ETAPAS.length, total_etapas: MODO_INTERNO ? null : ETAPAS.length })
     });
     if (resp.ok) {
       btns.forEach(b => { b.textContent = '✅ Enviado!'; b.style.background = '#27834a'; });
       alteradoSemEnviar = false;
+      if (!MODO_INTERNO) concluirCliente();
     } else {
       throw new Error('Erro ' + resp.status);
     }
@@ -742,6 +807,16 @@ const SLUG_EDICAO = (() => {
   // deixa a barra de endereço com o link "bonito"
   if (location.search) history.replaceState(null, '', base + slug);
   return slug;
+})();
+
+// Página interna (/formulario-trabalhista/interno ou link de uma entrevista): formulário completo.
+// Página do cliente (/formulario-trabalhista/): uma etapa por vez, salvando a cada etapa.
+const MODO_INTERNO = (() => {
+  const q = new URLSearchParams(location.search);
+  const interno = !!SLUG_EDICAO || q.get('p') === 'interno' || q.get('modo') === 'interno' ||
+                  /\/interno\/?$/.test(location.pathname);
+  if (q.get('p') === 'interno') history.replaceState(null, '', '/formulario-trabalhista/interno');
+  return interno;
 })();
 
 // ── ADVOGADO RESPONSÁVEL ─────────────────────────────────────────────────────
@@ -853,10 +928,196 @@ let alteradoSemEnviar = false;
 document.addEventListener('input', () => { alteradoSemEnviar = true; });
 document.addEventListener('change', () => { alteradoSemEnviar = true; });
 window.addEventListener('beforeunload', (ev) => {
-  if (!alteradoSemEnviar) return;
+  // na página do cliente o rascunho é salvo sozinho, então não precisa perguntar
+  if (!alteradoSemEnviar || !MODO_INTERNO) return;
   ev.preventDefault();
   ev.returnValue = '';
 });
+
+// ── PÁGINA DO CLIENTE: ETAPAS + RASCUNHO ─────────────────────────────────────
+// Cada seção do formulário vira uma etapa. A cada "Próximo" o rascunho é salvo no
+// sistema (aparece na lista como "Em andamento") e no aparelho (para continuar depois).
+const CHAVE_RASCUNHO_LOCAL = 'gv_entrevista_trabalhista_rascunho';
+let ETAPAS = [];
+let etapaAtual = 0;
+let CHAVE_CLIENTE = null;
+
+const novaChave = () => (window.crypto && crypto.randomUUID) ? crypto.randomUUID() :
+  'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    const r = Math.random() * 16 | 0; return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+  });
+const lerLocal = () => { try { return JSON.parse(localStorage.getItem(CHAVE_RASCUNHO_LOCAL) || 'null'); } catch (e) { return null; } };
+const gravarLocal = (v) => { try { v ? localStorage.setItem(CHAVE_RASCUNHO_LOCAL, JSON.stringify(v)) : localStorage.removeItem(CHAVE_RASCUNHO_LOCAL); } catch (e) {} };
+
+function montarEtapas() {
+  document.body.classList.add('modo-cliente');
+  const wrapper = document.querySelector('.page-wrapper');
+  const filhos = Array.from(wrapper.children);
+  const grupos = [];
+  let atual = null, tituloSecao = '';
+  filhos.forEach((el) => {
+    const ehSecao = el.classList.contains('sec-header') || el.classList.contains('sign-section');
+    const anterior = el.previousElementSibling;
+    const ehSubNova = el.classList.contains('sub-header') && atual && !(anterior && anterior.classList.contains('sec-header'));
+    if (ehSecao) {
+      tituloSecao = el.classList.contains('sign-section') ? 'Assinatura' : el.textContent.trim().replace(/:$/, '');
+      atual = { titulo: tituloSecao, els: [] };
+      grupos.push(atual);
+    } else if (ehSubNova) {
+      atual = { titulo: tituloSecao + ' – ' + el.textContent.trim().replace(/:$/, ''), els: [] };
+      grupos.push(atual);
+    }
+    if (atual) atual.els.push(el);
+  });
+  // na 1ª seção, a etapa leva o nome do primeiro subtítulo
+  if (grupos[0]) {
+    const sub = grupos[0].els.find((e) => e.classList.contains('sub-header'));
+    if (sub) grupos[0].titulo = grupos[0].titulo + ' – ' + sub.textContent.trim().replace(/:$/, '');
+  }
+  ETAPAS = grupos.map((g) => {
+    const div = document.createElement('div');
+    div.className = 'etapa etapa-oculta';
+    div.dataset.titulo = g.titulo;
+    g.els[0].parentNode.insertBefore(div, g.els[0]);
+    g.els.forEach((e) => div.appendChild(e));
+    return div;
+  });
+
+  // no celular, cada caixinha fica junto do seu texto (não quebra linha entre os dois)
+  wrapper.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach((inp) => {
+    const lbl = inp.nextElementSibling;
+    if (!lbl || lbl.tagName !== 'LABEL') return;
+    const par = document.createElement('span');
+    par.className = 'opcao';
+    inp.parentNode.insertBefore(par, inp);
+    par.appendChild(inp);
+    par.appendChild(lbl);
+  });
+
+  // quadro de assinatura do advogado é só para a equipe
+  const boxes = document.querySelectorAll('.sign-box');
+  if (boxes[1]) boxes[1].classList.add('so-interno');
+
+  const topo = document.createElement('div');
+  topo.className = 'wizard-topo';
+  topo.innerHTML = '<div class="wizard-passo"><span id="wz-num"></span><strong id="wz-titulo"></strong></div>' +
+                   '<div class="wizard-barra"><div id="wz-barra"></div></div>';
+  wrapper.insertBefore(topo, ETAPAS[0]);
+
+  const nav = document.createElement('div');
+  nav.className = 'wizard-nav';
+  nav.innerHTML = '<div class="wz-erro" id="wz-erro"></div>' +
+    '<button type="button" class="wz-voltar" id="wz-voltar">← Voltar</button>' +
+    '<button type="button" class="wz-proximo" id="wz-proximo">Próximo →</button>' +
+    '<button type="button" class="wz-enviar send-btn" id="wz-enviar">📤 Enviar para o Sistema</button>';
+  wrapper.appendChild(nav);
+  document.getElementById('wz-voltar').addEventListener('click', () => irPara(etapaAtual - 1));
+  document.getElementById('wz-proximo').addEventListener('click', proximaEtapa);
+  document.getElementById('wz-enviar').addEventListener('click', () => { if (validarEtapa(0, true)) enviarFormulario(); });
+
+  // rascunho deste aparelho: continua de onde parou
+  const local = lerLocal();
+  if (local && local.chave && local.dados) {
+    CHAVE_CLIENTE = local.chave;
+    restaurarDados(local.dados);
+    irPara(Math.min(local.etapa || 0, ETAPAS.length - 1));
+    const aviso = document.createElement('div');
+    aviso.className = 'aviso-edicao aviso-continuar';
+    aviso.innerHTML = '✏️ Continuando de onde você parou. <button type="button" id="wz-zerar">Começar do zero</button>';
+    wrapper.parentNode.insertBefore(aviso, wrapper);
+    document.getElementById('wz-zerar').addEventListener('click', () => {
+      if (!confirm('Apagar o que foi preenchido neste aparelho e começar do zero?')) return;
+      gravarLocal(null); location.reload();
+    });
+  } else {
+    CHAVE_CLIENTE = novaChave();
+    irPara(0);
+  }
+
+  // guarda no aparelho enquanto digita (sem esperar o "Próximo")
+  let t = null;
+  document.addEventListener('input', () => { clearTimeout(t); t = setTimeout(salvarLocal, 600); });
+  document.addEventListener('change', () => { clearTimeout(t); t = setTimeout(salvarLocal, 600); });
+}
+
+function salvarLocal() {
+  gravarLocal({ chave: CHAVE_CLIENTE, dados: coletarDados(), etapa: etapaAtual, ts: Date.now() });
+}
+
+function irPara(i) {
+  if (i < 0 || i >= ETAPAS.length) return;
+  etapaAtual = i;
+  ETAPAS.forEach((e, n) => e.classList.toggle('etapa-oculta', n !== i));
+  document.getElementById('wz-num').textContent = 'Etapa ' + (i + 1) + ' de ' + ETAPAS.length;
+  document.getElementById('wz-titulo').textContent = ETAPAS[i].dataset.titulo;
+  document.getElementById('wz-barra').style.width = Math.round((i + 1) / ETAPAS.length * 100) + '%';
+  document.getElementById('wz-voltar').style.visibility = i === 0 ? 'hidden' : 'visible';
+  const ultima = i === ETAPAS.length - 1;
+  document.getElementById('wz-proximo').style.display = ultima ? 'none' : '';
+  document.getElementById('wz-enviar').style.display = ultima ? '' : 'none';
+  document.getElementById('wz-erro').textContent = '';
+  document.querySelectorAll('textarea.auto-input').forEach(autoResize);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Etapa 1: nome, CPF e telefone são obrigatórios (o telefone liga a entrevista ao DataCrazy)
+function validarEtapa(i, irSeErro) {
+  if (i !== 0) return true;
+  const regras = [
+    ['rec_nome', (v) => v.trim().split(/\s+/).length >= 2, 'Informe o nome completo.'],
+    ['rec_cpf', (v) => v.replace(/\D/g, '').length === 11, 'Informe o CPF (11 números).'],
+    ['rec_telefone', (v) => v.replace(/\D/g, '').length >= 10, 'Informe o telefone com DDD.'],
+  ];
+  let erro = '';
+  regras.forEach(([nome, ok, msg]) => {
+    const el = document.querySelector('[name="' + nome + '"]');
+    const valido = el && ok(el.value || '');
+    if (el) el.closest('td, .field, .inline-row')?.classList.toggle('campo-erro', !valido);
+    if (!valido && !erro) erro = msg;
+  });
+  if (erro) {
+    if (irSeErro && etapaAtual !== 0) irPara(0);
+    document.getElementById('wz-erro').textContent = erro;
+    return false;
+  }
+  return true;
+}
+
+function proximaEtapa() {
+  if (!validarEtapa(etapaAtual, false)) return;
+  irPara(etapaAtual + 1);
+  salvarLocal();
+  salvarRascunho();
+}
+
+// Envia o rascunho ao sistema sem travar a tela (se falhar, fica guardado no aparelho)
+function salvarRascunho() {
+  try {
+    fetch(WEBHOOK_URL, {
+      method: 'POST',
+      keepalive: true,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ html: gerarHtmlFinal(), dados: coletarDados(), rascunho: true,
+                             chave: CHAVE_CLIENTE, etapa: etapaAtual + 1, total_etapas: ETAPAS.length }),
+    }).catch(() => {});
+  } catch (e) {}
+}
+
+function concluirCliente() {
+  gravarLocal(null);
+  const wrapper = document.querySelector('.page-wrapper');
+  ETAPAS.forEach((e) => e.classList.add('etapa-oculta'));
+  wrapper.querySelectorAll('.wizard-topo, .wizard-nav').forEach((e) => { e.style.display = 'none'; });
+  document.querySelectorAll('.aviso-continuar').forEach((e) => e.remove());
+  const fim = document.createElement('div');
+  fim.className = 'wizard-fim';
+  fim.innerHTML = '<div class="wz-check">✅</div><h2>Recebemos suas informações!</h2>' +
+                  '<p>Obrigado. Nossa equipe vai analisar e entrar em contato pelo WhatsApp.</p>';
+  wrapper.appendChild(fim);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+document.addEventListener('DOMContentLoaded', () => { if (!MODO_INTERNO) montarEtapas(); });
 </script>
 </body>
 </html>

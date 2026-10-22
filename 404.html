@@ -10,6 +10,7 @@
     var base = '/formulario-trabalhista/';
     var path = location.pathname;
     var resto = path.indexOf(base) === 0 ? path.slice(base.length).replace(/\/+$/, '') : '';
+    // "interno" e os links de entrevista caem no ?p= e abrem a página completa
     if (resto === 'lista') {
       location.replace(base + 'lista.html');
     } else if (resto) {

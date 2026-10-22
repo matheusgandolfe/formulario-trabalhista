@@ -46,6 +46,7 @@
   .btn-excluir:hover { background: #fdecea; }
   .btn-excluir:disabled { opacity: .5; cursor: wait; }
   .vazio { padding: 30px; text-align: center; color: var(--suave); }
+  .selo-andamento { background: #e8f1fb !important; color: #1e4a6e !important; border-color: #9fc0e0 !important; }
   .selo { display: inline-block; font-size: 11px; background: #fff7e0; color: #5c4300; border: 1px solid #e6c46a; border-radius: 10px; padding: 1px 7px; margin-left: 6px; }
   .embutida .btn-novo { display: none; }
   .embutida .topo { padding: 10px 16px; }
@@ -68,7 +69,7 @@
   <div class="topo-int">
     <h1>Entrevistas Trabalhistas<small>GRUPO GV</small></h1>
     <div class="acoes-topo">
-      <a class="btn btn-novo" href="/formulario-trabalhista/">+ Nova entrevista</a>
+      <a class="btn btn-novo" href="/formulario-trabalhista/interno">+ Nova entrevista</a>
       <button class="btn btn-sair" id="sair" hidden>Sair</button>
     </div>
   </div>
@@ -149,7 +150,7 @@ function render() {
   document.getElementById('linhas').innerHTML = filtrados.map((i) => {
     const link = BASE + i.slug;
     return `<tr>
-      <td><span class="nome">${esc(i.nome)}</span>${i.versao > 1 ? `<span class="selo">corrigida ${i.versao - 1}x</span>` : ''}<div class="slug">${esc(i.slug)}</div></td>
+      <td><span class="nome">${esc(i.nome)}</span>${i.status === 'rascunho' ? `<span class="selo selo-andamento" title="O cliente começou e ainda não clicou em Enviar">em andamento · etapa ${i.etapa || '?'} de ${i.total_etapas || '?'}</span>` : ''}${i.versao > 1 ? `<span class="selo">corrigida ${i.versao - 1}x</span>` : ''}<div class="slug">${esc(i.slug)}</div></td>
       <td class="num" data-r="CPF">${esc(i.cpf || '—')}</td>
       <td class="num" data-r="Telefone">${esc(fmtTel(i.telefone))}</td>
       <td class="num" data-r="Atualizada">${esc(fmtData(i.atualizado_em))}</td>
