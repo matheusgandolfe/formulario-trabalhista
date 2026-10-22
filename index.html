@@ -302,6 +302,40 @@
   @media (max-width: 600px) {
     body.modo-cliente .wizard-passo strong { font-size: 20px; }
   }
+
+  /* ── cartão + grade (ajuste 2) ── */
+  body.modo-cliente { background: #E6ECE9; }
+  body.modo-cliente .page-wrapper {
+    max-width: 600px; margin: 28px auto; padding: 4px 28px 0; background: #fff; border-radius: 16px;
+    box-shadow: 0 1px 2px rgba(24, 48, 42, .06), 0 10px 30px rgba(24, 48, 42, .07);
+  }
+  body.modo-cliente .gv-topo { border-bottom-color: #E3E9E6; }
+  body.modo-cliente .wizard-barra { background: #E3E9E6; }
+  body.modo-cliente .etapa td.lbl { font-size: 13.5px; color: #3A4E47; padding: 14px 0 6px; }
+  body.modo-cliente .auto-input, body.modo-cliente input[type="date"], body.modo-cliente input[type="text"] {
+    background: #FAFBFA; border-color: #D3DDD8 !important;
+  }
+  body.modo-cliente .auto-input:focus, body.modo-cliente input[type="date"]:focus { background: #fff; }
+  body.modo-cliente .etapa td.val input[type="date"] { width: 100%; min-width: 0; }
+  body.modo-cliente .inline-row, body.modo-cliente .full-row { border-bottom-color: #E3E9E6; }
+  body.modo-cliente .opcao { background: #FAFBFA; border-color: #D3DDD8; }
+  body.modo-cliente .wizard-nav {
+    margin: 22px -28px 0; padding-left: 28px; padding-right: 28px; background: #fff; border-top-color: #E3E9E6;
+    border-radius: 0 0 16px 16px;
+  }
+  @media (min-width: 640px) {
+    /* dados pessoais: campos curtos lado a lado */
+    body.modo-cliente .etapa tbody:has([name="rec_nome"]) { display: grid; grid-template-columns: 1fr 1fr; column-gap: 16px; }
+    body.modo-cliente .etapa tbody:has([name="rec_nome"]) > tr:has([name="rec_nome"]),
+    body.modo-cliente .etapa tbody:has([name="rec_nome"]) > tr:has([name="rec_endereco"]),
+    body.modo-cliente .etapa tbody:has([name="rec_nome"]) > tr:has([name="rec_mae"]) { grid-column: 1 / -1; }
+  }
+  @media (max-width: 600px) {
+    body.modo-cliente { background: #fff; }
+    body.modo-cliente .page-wrapper { margin: 0; border-radius: 0; box-shadow: none; padding: 0 16px; }
+    body.modo-cliente .wizard-nav { margin: 22px -16px 0; padding-left: 16px; padding-right: 16px; border-radius: 0; }
+    body.modo-cliente .etapa td.val input[type="date"] { width: 100%; }
+  }
 </style>
 </head>
 <body>
