@@ -47,6 +47,10 @@
   .btn-excluir:disabled { opacity: .5; cursor: wait; }
   .vazio { padding: 30px; text-align: center; color: var(--suave); }
   .selo { display: inline-block; font-size: 11px; background: #fff7e0; color: #5c4300; border: 1px solid #e6c46a; border-radius: 10px; padding: 1px 7px; margin-left: 6px; }
+  .embutida .btn-novo { display: none; }
+  .embutida .topo { padding: 10px 16px; }
+  .embutida .topo h1 { font-size: 16px; }
+  .embutida .login { margin-top: 30px; }
   @media (max-width: 720px) {
     thead { display: none; }
     table, tbody, tr, td { display: block; width: 100%; }
@@ -99,7 +103,16 @@ const WEBHOOK_LISTA = 'https://gvirtus.app.n8n.cloud/webhook/entrevistas-trabalh
 const BASE = location.origin + '/formulario-trabalhista/';
 const CHAVE = 'gv_lista_entrevistas_senha';
 let itens = [];
-if (location.pathname.endsWith('/lista.html')) history.replaceState(null, '', BASE + 'lista');
+// Aberta dentro da janela do formulário: "Abrir" vai para outra aba, para não perder o que está sendo preenchido
+const EMBUTIDA = window.self !== window.top || new URLSearchParams(location.search).has('embed');
+if (EMBUTIDA) {
+  document.body.classList.add('embutida');
+  // Esc dentro da lista também fecha a janela do formulário
+  document.addEventListener('keydown', (ev) => {
+    if (ev.key === 'Escape') { try { window.parent.fecharLista(); } catch (e) {} }
+  });
+}
+else if (location.pathname.endsWith('/lista.html')) history.replaceState(null, '', BASE + 'lista');
 
 const guardar = (v) => { try { v ? localStorage.setItem(CHAVE, v) : localStorage.removeItem(CHAVE); } catch (e) {} };
 const lembrada = () => { try { return localStorage.getItem(CHAVE) || ''; } catch (e) { return ''; } };
@@ -140,7 +153,7 @@ function render() {
       <td class="num" data-r="CPF">${esc(i.cpf || '—')}</td>
       <td class="num" data-r="Telefone">${esc(fmtTel(i.telefone))}</td>
       <td class="num" data-r="Atualizada">${esc(fmtData(i.atualizado_em))}</td>
-      <td class="acoes"><a class="btn btn-abrir" href="${esc(link)}">Abrir</a>
+      <td class="acoes"><a class="btn btn-abrir" href="${esc(link)}"${EMBUTIDA ? ' target="_blank" rel="noopener" title="Abre em outra aba"' : ''}>Abrir${EMBUTIDA ? ' ↗' : ''}</a>
         <button class="btn btn-copiar" data-link="${esc(link)}">Copiar link</button>
         <button class="btn btn-excluir" data-slug="${esc(i.slug)}" data-nome="${esc(i.nome)}" title="Tirar da lista">Excluir</button></td>
     </tr>`;
