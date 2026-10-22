@@ -228,7 +228,7 @@
   /* rodapé com Voltar / Continuar, fixo no celular */
   body.modo-cliente .wizard-nav {
     position: sticky; bottom: 0; z-index: 5; margin: 26px -20px 0; padding: 14px 20px calc(14px + env(safe-area-inset-bottom));
-    background: rgba(241, 244, 242, .96); border-top: 1px solid var(--gv-linha); backdrop-filter: blur(6px);
+    background: var(--gv-fundo); border-top: 1px solid var(--gv-linha);
   }
   body.modo-cliente .wizard-nav button { font: inherit; font-size: 17px; font-weight: 700; border-radius: 12px; padding: 14px 22px; min-height: 52px; }
   body.modo-cliente .wz-voltar { background: transparent; color: var(--gv-verde); border: 1.5px solid var(--gv-linha) !important; }
@@ -264,6 +264,43 @@
     body.modo-cliente .wizard-passo strong { font-size: 24px; }
     body.modo-cliente .wizard-nav { margin: 22px -16px 0; padding-left: 16px; padding-right: 16px; }
     body.modo-cliente .wz-proximo, body.modo-cliente .wz-enviar { max-width: none; }
+  }
+
+  /* ── tamanhos mais contidos (ajuste) ── */
+  body.modo-cliente .page-wrapper { max-width: 560px; font-size: 15px; }
+  body.modo-cliente .gv-topo { padding: 14px 0 10px; }
+  body.modo-cliente .gv-marca { font-size: 16px; }
+  body.modo-cliente .gv-sub { font-size: 14px; }
+  body.modo-cliente .wizard-topo { margin: 18px 0 4px; }
+  body.modo-cliente .wizard-passo { gap: 2px; margin-bottom: 10px; }
+  body.modo-cliente .wizard-passo span { font-size: 13px; }
+  body.modo-cliente .wizard-passo strong { font-size: 21px; }
+  body.modo-cliente .wizard-barra { height: 4px; }
+  body.modo-cliente .etapa td.lbl { padding: 12px 0 5px; font-size: 14px; }
+  body.modo-cliente .sub-header { font-size: 16px; padding-top: 18px; }
+  body.modo-cliente .auto-input, body.modo-cliente input[type="date"], body.modo-cliente input[type="text"] {
+    font-size: 16px; padding: 8px 12px; min-height: 40px; border-radius: 8px; border-width: 1px !important;
+  }
+  body.modo-cliente input[type="date"] { min-width: 160px; }
+  body.modo-cliente .auto-input:focus, body.modo-cliente input[type="date"]:focus { box-shadow: 0 0 0 3px rgba(30, 90, 76, .14); }
+  body.modo-cliente .inline-row, body.modo-cliente .full-row { padding: 12px 0; font-size: 15px; gap: 8px 6px; }
+  body.modo-cliente .full-row .row-label { font-size: 14px; margin-bottom: 5px; }
+  body.modo-cliente .opcao { padding: 6px 12px 6px 10px; gap: 7px; min-height: 36px; border-width: 1px; }
+  body.modo-cliente .opcao input { width: 17px; height: 17px; }
+  body.modo-cliente .opcao label { font-size: 15px; }
+  body.modo-cliente .sign-fields .field label { font-size: 14px !important; margin-bottom: 5px !important; }
+  body.modo-cliente .wizard-nav { margin-top: 18px; padding-top: 10px; padding-bottom: calc(10px + env(safe-area-inset-bottom)); }
+  body.modo-cliente .wizard-nav button { font-size: 15px; padding: 10px 18px; min-height: 44px; border-radius: 10px; }
+  body.modo-cliente .wz-voltar.wz-oculto { display: none; }
+  body.modo-cliente .wz-erro { font-size: 14px; }
+  body.modo-cliente .wz-salvo { font-size: 13px; }
+  body.modo-cliente .testemunha-block { padding: 10px 12px; }
+  body.modo-cliente .btn-add-test { font-size: 15px; padding: 9px 14px; }
+  body.modo-cliente .wizard-fim h2 { font-size: 24px; }
+  body.modo-cliente .wizard-fim p { font-size: 16px; }
+  body.modo-cliente .wizard-fim .wz-check { width: 52px; height: 52px; }
+  @media (max-width: 600px) {
+    body.modo-cliente .wizard-passo strong { font-size: 20px; }
   }
 </style>
 </head>
@@ -1255,7 +1292,7 @@ function irPara(i) {
   document.getElementById('wz-num').textContent = 'Parte ' + (i + 1) + ' de ' + ETAPAS.length;
   document.getElementById('wz-titulo').textContent = ETAPAS[i].dataset.titulo;
   document.getElementById('wz-barra').style.width = Math.round((i + 1) / ETAPAS.length * 100) + '%';
-  document.getElementById('wz-voltar').style.visibility = i === 0 ? 'hidden' : 'visible';
+  document.getElementById('wz-voltar').classList.toggle('wz-oculto', i === 0);
   const ultima = i === ETAPAS.length - 1;
   document.getElementById('wz-proximo').style.display = ultima ? 'none' : '';
   document.getElementById('wz-enviar').style.display = ultima ? '' : 'none';
