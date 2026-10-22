@@ -730,6 +730,8 @@ function gerarHtmlFinal() {
 
   // Remove elementos de interface
   clone.querySelectorAll('.btn-bar, .btn-add-test, .btn-rem-test, .test-pergunta, .aviso-edicao, .adv-escolha, .modal-lista, .wizard-topo, .wizard-nav, .wizard-fim').forEach(el => el.remove());
+  // O código da página não vai junto (o sistema só usa o conteúdo; deixa o envio leve)
+  clone.querySelectorAll('script').forEach(el => el.remove());
   // Página do cliente: o documento enviado mostra todas as etapas, sem o layout de celular
   clone.querySelectorAll('.etapa-oculta').forEach(el => el.classList.remove('etapa-oculta'));
   const corpoClone = clone.querySelector('body');
@@ -1098,7 +1100,6 @@ function salvarRascunho() {
   try {
     fetch(WEBHOOK_URL, {
       method: 'POST',
-      keepalive: true,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ html: gerarHtmlFinal(), dados: coletarDados(), rascunho: true,
                              chave: CHAVE_CLIENTE, etapa: etapaAtual + 1, total_etapas: ETAPAS.length }),
