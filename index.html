@@ -148,7 +148,7 @@
     --gv-tinta: #18302A; --gv-suave: #4F625C; --gv-verde: #1E5A4C; --gv-verde-esc: #164338;
     --gv-verde-claro: #E4F0EB; --gv-fundo: #F1F4F2; --gv-linha: #CDD8D3; --gv-erro: #A3241A;
     background: var(--gv-fundo); color: var(--gv-tinta); padding: 0;
-    font-family: 'Atkinson Hyperlegible', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    font-family: 'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
     -webkit-font-smoothing: antialiased;
   }
   body.modo-cliente .page-wrapper {
@@ -336,6 +336,13 @@
     body.modo-cliente .wizard-nav { margin: 22px -16px 0; padding-left: 16px; padding-right: 16px; border-radius: 0; }
     body.modo-cliente .etapa td.val input[type="date"] { width: 100%; }
   }
+
+  /* ── fonte Figtree: pesos ── */
+  body.modo-cliente .etapa td.lbl, body.modo-cliente .full-row .row-label, body.modo-cliente .sign-fields .field label,
+  body.modo-cliente .inline-row > span:not(.opcao) { font-weight: 600; }
+  body.modo-cliente .wizard-nav button, body.modo-cliente .gv-marca { font-weight: 600; }
+  body.modo-cliente .wizard-passo strong { font-weight: 700; letter-spacing: -.01em; }
+  body.modo-cliente .opcao label { font-weight: 500; }
 </style>
 </head>
 <body>
@@ -1179,7 +1186,7 @@ function montarEtapas() {
   document.body.classList.add('modo-cliente');
   const fonte = document.createElement('link');
   fonte.rel = 'stylesheet';
-  fonte.href = 'https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap';
+  fonte.href = 'https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap';
   document.head.appendChild(fonte);
   const wrapper = document.querySelector('.page-wrapper');
   const filhos = Array.from(wrapper.children);
