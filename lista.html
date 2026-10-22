@@ -69,7 +69,7 @@
   <div class="topo-int">
     <h1>Entrevistas Trabalhistas<small>GRUPO GV</small></h1>
     <div class="acoes-topo">
-      <a class="btn btn-novo" href="/formulario-trabalhista/interno">+ Nova entrevista</a>
+      <a class="btn btn-novo" id="link-novo" href="interno">+ Nova entrevista</a>
       <button class="btn btn-sair" id="sair" hidden>Sair</button>
     </div>
   </div>
@@ -101,7 +101,9 @@
 
 <script>
 const WEBHOOK_LISTA = 'https://gvirtus.app.n8n.cloud/webhook/entrevistas-trabalhistas-lista';
-const BASE = location.origin + '/formulario-trabalhista/';
+// domínio próprio (raiz) ou GitHub Pages (/formulario-trabalhista/)
+const BASE = location.origin + (location.hostname.endsWith('github.io') ? '/formulario-trabalhista/' : '/');
+document.getElementById('link-novo').href = BASE + 'interno';
 const CHAVE = 'gv_lista_entrevistas_senha';
 let itens = [];
 // Aberta dentro da janela do formulário: "Abrir" vai para outra aba, para não perder o que está sendo preenchido

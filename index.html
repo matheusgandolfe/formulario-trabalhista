@@ -794,12 +794,15 @@ async function enviarFormulario() {
 }
 
 // ── EDIÇÃO (reabrir entrevista já enviada) ───────────────────────────────────
-// Link no formato /formulario-trabalhista/nome-sobrenome-12345-v1, enviado como nota
+// Funciona no domínio próprio (entrevista.grupogv.app.br, na raiz) e no GitHub Pages (/formulario-trabalhista/)
+const BASE_PATH = location.hostname.endsWith('github.io') ? '/formulario-trabalhista/' : '/';
+
+// Link no formato <BASE>nome-sobrenome-12345-v1, enviado como nota
 // interna no DataCrazy. Os dados ficam no Supabase (juridico.entrevistas_trabalhistas)
 // e são lidos/gravados só pelo n8n. O 404.html redireciona o caminho para ?p=slug.
 const WEBHOOK_ABRIR = 'https://gvirtus.app.n8n.cloud/webhook/entrevista-trabalhista';
 const SLUG_EDICAO = (() => {
-  const base = '/formulario-trabalhista/';
+  const base = BASE_PATH;
   let slug = new URLSearchParams(location.search).get('p') || '';
   if (!slug && location.pathname.startsWith(base)) slug = location.pathname.slice(base.length);
   slug = decodeURIComponent(slug).replace(/^\/+|\/+$/g, '').toLowerCase();
@@ -809,13 +812,13 @@ const SLUG_EDICAO = (() => {
   return slug;
 })();
 
-// Página interna (/formulario-trabalhista/interno ou link de uma entrevista): formulário completo.
-// Página do cliente (/formulario-trabalhista/): uma etapa por vez, salvando a cada etapa.
+// Página interna (<BASE>interno ou link de uma entrevista): formulário completo.
+// Página do cliente (<BASE>): uma etapa por vez, salvando a cada etapa.
 const MODO_INTERNO = (() => {
   const q = new URLSearchParams(location.search);
   const interno = !!SLUG_EDICAO || q.get('p') === 'interno' || q.get('modo') === 'interno' ||
                   /\/interno\/?$/.test(location.pathname);
-  if (q.get('p') === 'interno') history.replaceState(null, '', '/formulario-trabalhista/interno');
+  if (q.get('p') === 'interno') history.replaceState(null, '', BASE_PATH + 'interno');
   return interno;
 })();
 
@@ -908,7 +911,7 @@ function abrirLista() {
     modal.innerHTML = '<div class="modal-caixa" role="dialog" aria-label="Entrevistas">' +
       '<div class="modal-topo"><span>Entrevistas: o formulário continua aberto por trás</span>' +
       '<button type="button" class="modal-fechar" onclick="fecharLista()">✕ Fechar</button></div>' +
-      '<iframe title="Entrevistas" src="/formulario-trabalhista/lista.html?embed=1"></iframe></div>';
+      '<iframe title="Entrevistas" src="' + BASE_PATH + 'lista.html?embed=1"></iframe></div>';
     modal.addEventListener('click', (ev) => { if (ev.target === modal) fecharLista(); });
     document.body.appendChild(modal);
   }
